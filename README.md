@@ -66,7 +66,7 @@ An advanced AI-powered resume analyzer that helps job seekers optimize their res
    git add .
    git commit -m "Initial commit"
    git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
+   git remote add origin https://github.com/Jyotish2002/finalyearproject.git
    git push -u origin main
    ```
 
@@ -94,7 +94,7 @@ An advanced AI-powered resume analyzer that helps job seekers optimize their res
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
+git clone https://github.com/Jyotish2002/finalyearproject.git
 cd finalyear
 
 # Create virtual environment
@@ -195,4 +195,4 @@ For issues or questions:
 
 ---
 
-Made with ❤️ for job seekers worldwide
+Made with ❤️ for job seekers worldwide by Jyotish Yadav
