@@ -1,9 +1,36 @@
 # Virtual environment
 .venv/
 venv/
+env/
 
 # Python cache
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
+
+# Uploaded files
+Uploaded_Resumes/
+*.pdf
+
+# Database
+*.db
+*.sqlite
+
+# Sensitive credentials
+.env
+secrets.toml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+

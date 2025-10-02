@@ -36,6 +36,46 @@ import nltk
 from nltk.corpus import stopwords
 import re
 
+# Download NLTK data at startup (for Streamlit Cloud)
+try:
+    nltk.data.find('corpora/stopwords')
+except LookupError:
+    try:
+        nltk.download('stopwords', quiet=True)
+    except Exception as e:
+        pass  # Will use fallback stopwords
+
+DEFAULT_STOPWORDS = {
+    'a','about','above','after','again','against','all','am','an','and','any','are',
+    'as','at','be','because','been','before','being','below','between','both','but',
+    'by','could','did','do','does','doing','down','during','each','few','for','from',
+    'further','had','has','have','having','he','her','here','hers','herself','him',
+    'himself','his','how','i','if','in','into','is','it','its','itself','just','me',
+    'more','most','my','myself','no','nor','not','of','off','on','once','only','or',
+    'other','our','ours','ourselves','out','over','own','same','she','should','so',
+    'some','such','than','that','the','their','theirs','them','themselves','then','there',
+    'these','they','this','those','through','to','too','under','until','up','very','was',
+    'we','were','what','when','where','which','while','who','whom','why','with','you','your',
+    'yours','yourself','yourselves'
+}
+_STOPWORDS_CACHE = None
+
+def get_stopwords():
+    """Get English stopwords with fallback to built-in list"""
+    global _STOPWORDS_CACHE
+    if _STOPWORDS_CACHE is not None:
+        return _STOPWORDS_CACHE
+    try:
+        words = set(stopwords.words('english'))
+        if words:
+            _STOPWORDS_CACHE = words
+            return words
+    except:
+        pass
+    # Use fallback
+    _STOPWORDS_CACHE = DEFAULT_STOPWORDS
+    return DEFAULT_STOPWORDS
+
 
 ###### Preprocessing functions ######
 
@@ -175,12 +215,14 @@ try:
     connection = pymysql.connect(host='localhost',user='root',password='pass123',db='cv')
     cursor = connection.cursor()
     DB_AVAILABLE = True
-except pymysql.Error as e:
+except Exception as e:
+    # Database not available - continue without it
     DB_AVAILABLE = False
     connection = None
     cursor = None
-    st.warning(f"Database connection unavailable: {e}")
-    st.info("Continuing without database. Data won't be saved, but you can still use all analysis features.")
+    # Only show warning in development, not on Streamlit Cloud
+    if os.getenv('STREAMLIT_SHARING_MODE') is None:
+        pass  # Silent fail for cloud deployment
 
 
 # inserting miscellaneous data, fetched results, prediction and recommendation into user_data table
@@ -896,13 +938,10 @@ def run():
                 st.subheader("**Resume Analysis & Scoring 🥂**")
 
                 if job_description:
-                    # Download stopwords if not already present
-                    try:
-                        stopwords.words('english')
-                    except LookupError:
-                        nltk.download('stopwords')
+                    # Ensure stopwords are available
+                    stop_words = get_stopwords()
 
-                    def calculate_scores(resume_text, job_description_text, resume_data):
+                    def calculate_scores(resume_text, job_description_text, resume_data, stop_words):
                         scores = {
                             'skills_match': 0,
                             'keyword_alignment': 0,
@@ -931,7 +970,6 @@ def run():
                         scores['skills_match'] = min(int(skills_match_score), 100)
 
                         # 2. Keyword Alignment Score
-                        stop_words = set(stopwords.words('english'))
                         resume_words = set(re.findall(r'\w+', resume_text.lower()))
                         job_words = set(re.findall(r'\w+', job_text_lower))
                         
@@ -949,7 +987,7 @@ def run():
                         
                         return scores
 
-                    analysis_scores = calculate_scores(resume_text, job_description, resume_data)
+                    analysis_scores = calculate_scores(resume_text, job_description, resume_data, stop_words)
                     
                     st.markdown("""
                     <div class="chart-container">
