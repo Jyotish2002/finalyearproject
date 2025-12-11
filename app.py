@@ -25,12 +25,25 @@ from streamlit_tags import st_tags
 from PIL import Image
 # pre stored data for prediction purposes
 from Courses import ds_course,web_course,android_course,ios_course,uiux_course,resume_videos,interview_videos
-# Extended streams
+# Extended tech streams
 try:
     from Courses import genai_course, cloud_course, devops_course, cyber_course, data_eng_course, qa_course, product_course, blockchain_course, career_streams
 except Exception:
     genai_course = cloud_course = devops_course = cyber_course = data_eng_course = qa_course = product_course = blockchain_course = []
     career_streams = {}
+# Non-tech streams
+try:
+    from Courses import (marketing_course, sales_course, finance_course, hr_course, operations_course, 
+                         supply_chain_course, project_mgmt_course, business_analysis_course, entrepreneurship_course,
+                         admin_course, education_course, psychology_course, law_course, healthcare_course,
+                         nursing_course, medical_coding_course, pharmacy_course, graphic_design_course,
+                         journalism_course, content_writing_course, soft_skills_course)
+except Exception:
+    marketing_course = sales_course = finance_course = hr_course = operations_course = []
+    supply_chain_course = project_mgmt_course = business_analysis_course = entrepreneurship_course = []
+    admin_course = education_course = psychology_course = law_course = healthcare_course = []
+    nursing_course = medical_coding_course = pharmacy_course = graphic_design_course = []
+    journalism_course = content_writing_course = soft_skills_course = []
 
 import nltk
 from nltk.corpus import stopwords
@@ -825,11 +838,45 @@ def run():
                 text='See our skills recommendation below',value=current_skills,key = '1  ')
 
                 ### Keywords for Recommendations
-                ds_keyword = ['tensorflow','keras','pytorch','machine learning','deep Learning','flask','streamlit']
-                web_keyword = ['react', 'django', 'node jS', 'react js', 'php', 'laravel', 'magento', 'wordpress','javascript', 'angular js', 'C#', 'Asp.net', 'flask']
-                android_keyword = ['android','android development','flutter','kotlin','xml','kivy']
-                ios_keyword = ['ios','ios development','swift','cocoa','cocoa touch','xcode']
-                uiux_keyword = ['ux','adobe xd','figma','zeplin','balsamiq','ui','prototyping','wireframes','storyframes','adobe photoshop','photoshop','editing','adobe illustrator','illustrator','adobe after effects','after effects','adobe premier pro','premier pro','adobe indesign','indesign','wireframe','solid','grasp','user research','user experience']
+                # Tech Fields
+                ds_keyword = ['tensorflow','keras','pytorch','machine learning','deep Learning','flask','streamlit','data science','pandas','numpy','scikit-learn','jupyter','matplotlib','seaborn','statistics','regression','classification','neural network','nlp','computer vision']
+                web_keyword = ['react', 'django', 'node js', 'react js', 'php', 'laravel', 'magento', 'wordpress','javascript', 'angular js', 'c#', 'asp.net', 'flask', 'html', 'css', 'vue', 'bootstrap', 'tailwind', 'typescript', 'next.js', 'express', 'mongodb', 'mysql', 'frontend', 'backend', 'fullstack']
+                android_keyword = ['android','android development','flutter','kotlin','xml','kivy','android studio','java android','mobile development','firebase android']
+                ios_keyword = ['ios','ios development','swift','cocoa','cocoa touch','xcode','objective-c','swiftui','uikit','iphone development']
+                uiux_keyword = ['ux','adobe xd','figma','zeplin','balsamiq','ui','prototyping','wireframes','storyframes','adobe photoshop','photoshop','editing','adobe illustrator','illustrator','adobe after effects','after effects','adobe premier pro','premier pro','adobe indesign','indesign','wireframe','solid','grasp','user research','user experience','sketch','invision','usability']
+                
+                # Extended Tech Fields
+                genai_keyword = ['generative ai','llm','large language model','chatgpt','gpt','openai','langchain','prompt engineering','rag','retrieval augmented','transformers','hugging face','bert','claude','gemini','ai agents','vector database','embeddings','fine-tuning','llama']
+                cloud_keyword = ['aws','azure','gcp','google cloud','amazon web services','cloud computing','ec2','s3','lambda','cloudformation','terraform','cloud architecture','iaas','paas','saas','docker','kubernetes','k8s','microservices','serverless']
+                devops_keyword = ['devops','ci/cd','jenkins','github actions','gitlab ci','docker','kubernetes','ansible','puppet','chef','terraform','monitoring','prometheus','grafana','elk','linux','bash','shell scripting','infrastructure','deployment','containerization']
+                cyber_keyword = ['cybersecurity','security','penetration testing','ethical hacking','vulnerability','firewall','siem','soc','network security','information security','cryptography','malware','incident response','compliance','gdpr','iso 27001','cissp','ceh','security audit','threat analysis']
+                data_eng_keyword = ['data engineering','etl','data pipeline','airflow','spark','hadoop','kafka','data warehouse','snowflake','databricks','sql','big data','data lake','dbt','data modeling','redshift','bigquery','data integration','batch processing','stream processing']
+                qa_keyword = ['qa','quality assurance','testing','test automation','selenium','cypress','jest','junit','testng','api testing','postman','jmeter','load testing','performance testing','regression testing','manual testing','bug tracking','jira','test cases','agile testing']
+                product_keyword = ['product management','product manager','roadmap','agile','scrum','jira','user stories','sprint','backlog','stakeholder','mvp','product strategy','product analytics','a/b testing','feature prioritization','go-to-market','product lifecycle','user feedback','competitive analysis']
+                blockchain_keyword = ['blockchain','solidity','ethereum','smart contracts','web3','cryptocurrency','defi','nft','consensus','distributed ledger','hyperledger','bitcoin','crypto','token','dapp','decentralized','metamask','truffle','hardhat']
+                
+                # Non-Tech Fields
+                marketing_keyword = ['marketing','digital marketing','seo','sem','google ads','facebook ads','social media marketing','content marketing','email marketing','marketing automation','hubspot','mailchimp','brand management','campaign','analytics','google analytics','influencer marketing','ppc','cpc','conversion rate']
+                sales_keyword = ['sales','salesforce','crm','lead generation','b2b','b2c','account management','cold calling','sales strategy','negotiation','closing','quota','pipeline','customer acquisition','upselling','cross-selling','sales funnel','business development','client relationship']
+                finance_keyword = ['finance','accounting','financial analysis','excel','financial modeling','budgeting','forecasting','investment','banking','audit','taxation','sap','quickbooks','tally','gst','balance sheet','profit loss','cash flow','equity','valuation','cpa','cfa','risk management']
+                hr_keyword = ['hr','human resources','recruitment','talent acquisition','onboarding','payroll','employee engagement','performance management','hris','workday','succession planning','compensation','benefits','training','development','labor law','hr policies','workforce planning','diversity','inclusion']
+                operations_keyword = ['operations','operations management','process improvement','lean','six sigma','supply chain','logistics','inventory','procurement','vendor management','quality control','manufacturing','production','efficiency','kpi','sop','erp','sap','oracle','operational excellence']
+                supply_chain_keyword = ['supply chain','logistics','inventory management','procurement','warehousing','distribution','demand planning','supply planning','freight','shipping','transportation','vendor management','sourcing','purchase order','material planning','mrp','erp supply chain','cost optimization']
+                project_mgmt_keyword = ['project management','pmp','prince2','agile','scrum','kanban','ms project','asana','monday.com','trello','project planning','resource allocation','timeline','milestone','risk management','stakeholder management','budget management','scope management','gantt chart','project delivery']
+                business_analysis_keyword = ['business analysis','business analyst','requirements gathering','brd','frd','use cases','process mapping','gap analysis','stakeholder analysis','data analysis','sql','tableau','power bi','business process','system analysis','functional requirements','uml','swimlane','as-is to-be']
+                entrepreneurship_keyword = ['entrepreneurship','startup','business plan','venture capital','angel investor','pitch deck','bootstrapping','business model','market research','competitive analysis','growth hacking','scaling','funding','seed round','series a','incubator','accelerator','lean startup','mvp','customer validation']
+                admin_keyword = ['administration','administrative','office management','scheduling','calendar management','data entry','filing','records management','correspondence','travel arrangement','meeting coordination','office supplies','reception','executive assistant','personal assistant','office administration','clerical','organizational skills','business administration','business operations','strategic planning','department coordination','workflow','smooth workflow','coordinating departments','daily operations','strategic goals','interpersonal skills','multitasking','time management','attention to detail','decision-making','problem-solving','ms office','microsoft office','word excel','excel powerpoint','communication skills','organizational','work independently','work in a team','team player','basic understanding of business','knowledge of ms office','good organizational']
+                education_keyword = ['education','teaching','curriculum','lesson planning','classroom management','pedagogy','e-learning','lms','moodle','instructional design','student assessment','educational technology','tutoring','training','course development','academic','k-12','higher education','special education']
+                psychology_keyword = ['psychology','counseling','therapy','mental health','behavioral analysis','cognitive psychology','clinical psychology','psychotherapy','assessment','diagnosis','intervention','case management','client assessment','psychological testing','trauma','anxiety','depression','cbt','dbt']
+                law_keyword = ['law','legal','attorney','lawyer','litigation','contracts','compliance','corporate law','intellectual property','patent','trademark','legal research','case law','paralegal','legal writing','due diligence','regulatory','mergers acquisitions','dispute resolution','arbitration']
+                healthcare_keyword = ['healthcare','clinical','patient care','medical records','emr','ehr','hipaa','healthcare management','hospital','clinic','diagnosis','treatment','medical terminology','icd-10','cpt','billing','healthcare it','telemedicine','public health','epidemiology']
+                nursing_keyword = ['nursing','registered nurse','rn','patient care','medication administration','vital signs','clinical skills','nursing assessment','care plan','wound care','iv therapy','emergency nursing','icu','or','pediatric nursing','geriatric nursing','nurse practitioner','lpn','bsn']
+                medical_coding_keyword = ['medical coding','icd-10','cpt','hcpcs','medical billing','claims processing','revenue cycle','coding certification','cpc','ccs','drg','healthcare billing','insurance claims','reimbursement','coding accuracy','medical terminology','anatomy','health information']
+                pharmacy_keyword = ['pharmacy','pharmacist','pharmaceutical','drug dispensing','prescription','medication therapy','clinical pharmacy','compounding','pharmacy technician','drug interactions','formulary','pharmaceutical care','medication review','patient counseling','pharmacy management','inventory control','hospital pharmacy','retail pharmacy']
+                graphic_design_keyword = ['graphic design','photoshop','illustrator','indesign','canva','coreldraw','visual design','typography','branding','logo design','print design','digital design','layout','composition','color theory','vector graphics','raster','creative design','visual communication','motion graphics']
+                journalism_keyword = ['journalism','news writing','reporting','investigative journalism','press release','editorial','media','broadcasting','print media','digital media','news gathering','interviewing','fact-checking','ap style','beat reporting','feature writing','news production','multimedia journalism']
+                content_writing_keyword = ['content writing','copywriting','blog writing','seo writing','technical writing','creative writing','article writing','web content','social media content','content strategy','content creation','storytelling','editing','proofreading','ghostwriting','content marketing','website copy','product description']
+                
                 n_any = ['english','communication','writing', 'microsoft office', 'leadership','customer management', 'social media']
                 ### Skill Recommendations Starts                
                 recommended_skills = []
@@ -838,99 +885,169 @@ def run():
 
                 ### condition starts to check skills from keywords and predict field
                 skills_to_check = resume_data.get('skills', [])
-                if not skills_to_check or skills_to_check == ['No skills detected']:
-                    # If no skills detected, try to analyze from the resume text
-                    skills_to_check = []
-                    if 'resume_text' in locals():
-                        # Extract skills from text analysis
-                        text_lower = resume_text.lower()
-                        for category_skills in [ds_keyword, web_keyword, android_keyword, ios_keyword, uiux_keyword]:
-                            for skill in category_skills:
-                                if skill.lower() in text_lower:
-                                    skills_to_check.append(skill)
+                
+                # Also analyze resume text for better matching
+                resume_text_for_matching = resume_text.lower() if resume_text else ""
+                
+                # Also analyze job description for matching (prioritize job description)
+                job_desc_for_matching = job_description.lower() if job_description else ""
+                
+                # Create a dictionary to count matches for each category
+                category_matches = {
+                    'Data Science': {'keywords': ds_keyword, 'count': 0, 'course': ds_course},
+                    'Web Development': {'keywords': web_keyword, 'count': 0, 'course': web_course},
+                    'Android Development': {'keywords': android_keyword, 'count': 0, 'course': android_course},
+                    'IOS Development': {'keywords': ios_keyword, 'count': 0, 'course': ios_course},
+                    'UI-UX Development': {'keywords': uiux_keyword, 'count': 0, 'course': uiux_course},
+                    'Generative AI / LLM': {'keywords': genai_keyword, 'count': 0, 'course': genai_course},
+                    'Cloud Computing': {'keywords': cloud_keyword, 'count': 0, 'course': cloud_course},
+                    'DevOps Engineering': {'keywords': devops_keyword, 'count': 0, 'course': devops_course},
+                    'Cybersecurity': {'keywords': cyber_keyword, 'count': 0, 'course': cyber_course},
+                    'Data Engineering': {'keywords': data_eng_keyword, 'count': 0, 'course': data_eng_course},
+                    'QA / Software Testing': {'keywords': qa_keyword, 'count': 0, 'course': qa_course},
+                    'Product Management': {'keywords': product_keyword, 'count': 0, 'course': product_course},
+                    'Blockchain Development': {'keywords': blockchain_keyword, 'count': 0, 'course': blockchain_course},
+                    'Marketing': {'keywords': marketing_keyword, 'count': 0, 'course': marketing_course},
+                    'Sales': {'keywords': sales_keyword, 'count': 0, 'course': sales_course},
+                    'Finance & Accounting': {'keywords': finance_keyword, 'count': 0, 'course': finance_course},
+                    'Human Resources': {'keywords': hr_keyword, 'count': 0, 'course': hr_course},
+                    'Operations Management': {'keywords': operations_keyword, 'count': 0, 'course': operations_course},
+                    'Supply Chain Management': {'keywords': supply_chain_keyword, 'count': 0, 'course': supply_chain_course},
+                    'Project Management': {'keywords': project_mgmt_keyword, 'count': 0, 'course': project_mgmt_course},
+                    'Business Analysis': {'keywords': business_analysis_keyword, 'count': 0, 'course': business_analysis_course},
+                    'Entrepreneurship': {'keywords': entrepreneurship_keyword, 'count': 0, 'course': entrepreneurship_course},
+                    'Administration': {'keywords': admin_keyword, 'count': 0, 'course': admin_course},
+                    'Education & Teaching': {'keywords': education_keyword, 'count': 0, 'course': education_course},
+                    'Psychology & Counseling': {'keywords': psychology_keyword, 'count': 0, 'course': psychology_course},
+                    'Law & Legal': {'keywords': law_keyword, 'count': 0, 'course': law_course},
+                    'Healthcare Management': {'keywords': healthcare_keyword, 'count': 0, 'course': healthcare_course},
+                    'Nursing': {'keywords': nursing_keyword, 'count': 0, 'course': nursing_course},
+                    'Medical Coding & Billing': {'keywords': medical_coding_keyword, 'count': 0, 'course': medical_coding_course},
+                    'Pharmacy': {'keywords': pharmacy_keyword, 'count': 0, 'course': pharmacy_course},
+                    'Graphic Design': {'keywords': graphic_design_keyword, 'count': 0, 'course': graphic_design_course},
+                    'Journalism & Media': {'keywords': journalism_keyword, 'count': 0, 'course': journalism_course},
+                    'Content Writing': {'keywords': content_writing_keyword, 'count': 0, 'course': content_writing_course},
+                }
+                
+                # Count keyword matches - PRIORITIZE JOB DESCRIPTION
+                # If job description is provided, match ONLY against it for recommendations
+                # Otherwise fall back to resume analysis
+                import re
+                
+                def word_match(keyword, text):
+                    """Check if keyword exists as a whole word/phrase in text"""
+                    # Escape special regex characters in keyword
+                    escaped_keyword = re.escape(keyword.lower())
+                    # Use word boundaries for single words, or just check presence for phrases
+                    if ' ' in keyword:
+                        # Multi-word phrase - check if it exists in text
+                        return keyword.lower() in text.lower()
+                    else:
+                        # Single word - use word boundary matching
+                        pattern = r'\b' + escaped_keyword + r'\b'
+                        return bool(re.search(pattern, text.lower()))
+                
+                for category, data in category_matches.items():
+                    for keyword in data['keywords']:
+                        keyword_lower = keyword.lower()
                         
-                        if not skills_to_check:
-                            skills_to_check = ['general']  # Default to general category
+                        # If job description is provided, ONLY match against it
+                        if job_desc_for_matching:
+                            # Match ONLY against job description when it's provided
+                            if word_match(keyword, job_desc_for_matching):
+                                data['count'] += 5
+                        else:
+                            # No job description - fall back to resume analysis
+                            # Check in skills list
+                            if skills_to_check:
+                                for skill in skills_to_check:
+                                    if keyword_lower in skill.lower() or skill.lower() in keyword_lower:
+                                        data['count'] += 2
+                            
+                            # Check in resume text
+                            if word_match(keyword, resume_text_for_matching):
+                                data['count'] += 1
                 
-                for i in skills_to_check:
+                # Find the category with maximum matches
+                best_category = None
+                max_count = 0
+                for category, data in category_matches.items():
+                    if data['count'] > max_count:
+                        max_count = data['count']
+                        best_category = category
                 
-                    #### Data science recommendation
-                    if i.lower() in ds_keyword:
-                        print(i.lower())
-                        reco_field = 'Data Science'
-                        st.success("** Our analysis says you are looking for Data Science Jobs.**")
-                        recommended_skills = ['Data Visualization','Predictive Analysis','Statistical Modeling','Data Mining','Clustering & Classification','Data Analytics','Quantitative Analysis','Web Scraping','ML Algorithms','Keras','Pytorch','Probability','Scikit-learn','Tensorflow',"Flask",'Streamlit']
-                        recommended_keywords = st_tags(label='### Recommended skills for you.',
-                        text='Recommended skills generated from System',value=recommended_skills,key = '2')
-                        st.markdown('''<h5 style='text-align: left; color: #1ed760;'>Adding this skills to resume will boost🚀 the chances of getting a Job</h5>''',unsafe_allow_html=True)
-                        # course recommendation
-                        rec_course = course_recommender(ds_course)
-                        break
-
-                    #### Web development recommendation
-                    elif i.lower() in web_keyword:
-                        print(i.lower())
-                        reco_field = 'Web Development'
-                        st.success("** Our analysis says you are looking for Web Development Jobs **")
-                        recommended_skills = ['React','Django','Node JS','React JS','php','laravel','Magento','wordpress','Javascript','Angular JS','c#','Flask','SDK']
-                        recommended_keywords = st_tags(label='### Recommended skills for you.',
-                        text='Recommended skills generated from System',value=recommended_skills,key = '3')
-                        st.markdown('''<h5 style='text-align: left; color: #1ed760;'>Adding this skills to resume will boost🚀 the chances of getting a Job💼</h5>''',unsafe_allow_html=True)
-                        # course recommendation
-                        rec_course = course_recommender(web_course)
-                        break
-
-                    #### Android App Development
-                    elif i.lower() in android_keyword:
-                        print(i.lower())
-                        reco_field = 'Android Development'
-                        st.success("** Our analysis says you are looking for Android App Development Jobs **")
-                        recommended_skills = ['Android','Android development','Flutter','Kotlin','XML','Java','Kivy','GIT','SDK','SQLite']
-                        recommended_keywords = st_tags(label='### Recommended skills for you.',
-                        text='Recommended skills generated from System',value=recommended_skills,key = '4')
-                        st.markdown('''<h5 style='text-align: left; color: #1ed760;'>Adding this skills to resume will boost🚀 the chances of getting a Job💼</h5>''',unsafe_allow_html=True)
-                        # course recommendation
-                        rec_course = course_recommender(android_course)
-                        break
-
-                    #### IOS App Development
-                    elif i.lower() in ios_keyword:
-                        print(i.lower())
-                        reco_field = 'IOS Development'
-                        st.success("** Our analysis says you are looking for IOS App Development Jobs **")
-                        recommended_skills = ['IOS','IOS Development','Swift','Cocoa','Cocoa Touch','Xcode','Objective-C','SQLite','Plist','StoreKit',"UI-Kit",'AV Foundation','Auto-Layout']
-                        recommended_keywords = st_tags(label='### Recommended skills for you.',
-                        text='Recommended skills generated from System',value=recommended_skills,key = '5')
-                        st.markdown('''<h5 style='text-align: left; color: #1ed760;'>Adding this skills to resume will boost🚀 the chances of getting a Job💼</h5>''',unsafe_allow_html=True)
-                        # course recommendation
-                        rec_course = course_recommender(ios_course)
-                        break
-
-                    #### Ui-UX Recommendation
-                    elif i.lower() in uiux_keyword:
-                        print(i.lower())
-                        reco_field = 'UI-UX Development'
-                        st.success("** Our analysis says you are looking for UI-UX Development Jobs **")
-                        recommended_skills = ['UI','User Experience','Adobe XD','Figma','Zeplin','Balsamiq','Prototyping','Wireframes','Storyframes','Adobe Photoshop','Editing','Illustrator','After Effects','Premier Pro','Indesign','Wireframe','Solid','Grasp','User Research']
-                        recommended_keywords = st_tags(label='### Recommended skills for you.',
-                        text='Recommended skills generated from System',value=recommended_skills,key = '6')
-                        st.markdown('''<h5 style='text-align: left; color: #1ed760;'>Adding this skills to resume will boost🚀 the chances of getting a Job💼</h5>''',unsafe_allow_html=True)
-                        # course recommendation
-                        rec_course = course_recommender(uiux_course)
-                        break
-
-                    #### For Not Any Recommendations
-                    elif i.lower() in n_any:
-                        print(i.lower())
-                        reco_field = 'NA'
-                        st.warning("** Currently our tool only predicts and recommends for Data Science, Web, Android, IOS and UI/UX Development**")
-                        recommended_skills = ['No Recommendations']
-                        recommended_keywords = st_tags(label='### Recommended skills for you.',
-                        text='Currently No Recommendations',value=recommended_skills,key = '6')
-                        st.markdown('''<h5 style='text-align: left; color: #092851;'>Maybe Available in Future Updates</h5>''',unsafe_allow_html=True)
-                        # course recommendation
-                        rec_course = "Sorry! Not Available for this Field"
-                        break
+                # Define recommended skills for each category
+                category_recommended_skills = {
+                    'Data Science': ['Data Visualization','Predictive Analysis','Statistical Modeling','Data Mining','Clustering & Classification','Data Analytics','Quantitative Analysis','Web Scraping','ML Algorithms','Keras','Pytorch','Probability','Scikit-learn','Tensorflow','Flask','Streamlit'],
+                    'Web Development': ['React','Django','Node JS','React JS','php','laravel','Magento','wordpress','Javascript','Angular JS','c#','Flask','SDK'],
+                    'Android Development': ['Android','Android development','Flutter','Kotlin','XML','Java','Kivy','GIT','SDK','SQLite'],
+                    'IOS Development': ['IOS','IOS Development','Swift','Cocoa','Cocoa Touch','Xcode','Objective-C','SQLite','Plist','StoreKit','UI-Kit','AV Foundation','Auto-Layout'],
+                    'UI-UX Development': ['UI','User Experience','Adobe XD','Figma','Zeplin','Balsamiq','Prototyping','Wireframes','Storyframes','Adobe Photoshop','Editing','Illustrator','After Effects','Premier Pro','Indesign','Wireframe','Solid','Grasp','User Research'],
+                    'Generative AI / LLM': ['LLM','Prompt Engineering','LangChain','RAG','Vector Databases','Hugging Face','Transformers','Fine-tuning','OpenAI API','Claude','GPT','Embeddings','AI Agents','Python','PyTorch'],
+                    'Cloud Computing': ['AWS','Azure','GCP','Docker','Kubernetes','Terraform','CloudFormation','Lambda','EC2','S3','IAM','VPC','Serverless','Microservices','CI/CD'],
+                    'DevOps Engineering': ['CI/CD','Jenkins','GitHub Actions','Docker','Kubernetes','Ansible','Terraform','Linux','Shell Scripting','Prometheus','Grafana','ELK Stack','Git','Monitoring','Infrastructure as Code'],
+                    'Cybersecurity': ['Penetration Testing','Network Security','SIEM','SOC','Vulnerability Assessment','Firewall','Incident Response','Cryptography','Ethical Hacking','CISSP','CEH','Compliance','Risk Assessment','Security Audit'],
+                    'Data Engineering': ['ETL','Apache Spark','Airflow','Kafka','SQL','Data Warehouse','Snowflake','Databricks','Python','Big Data','Data Pipeline','Hadoop','Data Modeling','dbt','AWS/GCP/Azure Data Services'],
+                    'QA / Software Testing': ['Test Automation','Selenium','Cypress','API Testing','Postman','JMeter','JIRA','Test Cases','Manual Testing','Performance Testing','Regression Testing','Agile Testing','Bug Tracking','Load Testing'],
+                    'Product Management': ['Product Strategy','Agile/Scrum','JIRA','Roadmapping','User Stories','Stakeholder Management','Data Analytics','A/B Testing','MVP','Go-to-Market','Competitive Analysis','User Research','Prioritization'],
+                    'Blockchain Development': ['Solidity','Ethereum','Smart Contracts','Web3.js','DeFi','NFT','Hyperledger','Consensus Mechanisms','Cryptography','dApps','Truffle','Hardhat','MetaMask','Token Standards'],
+                    'Marketing': ['Digital Marketing','SEO','SEM','Google Ads','Social Media Marketing','Content Marketing','Email Marketing','Marketing Automation','Google Analytics','HubSpot','Brand Management','PPC','Influencer Marketing'],
+                    'Sales': ['Salesforce','CRM','Lead Generation','B2B Sales','Negotiation','Account Management','Pipeline Management','Cold Calling','Sales Strategy','Client Relationship','Business Development','Closing Deals'],
+                    'Finance & Accounting': ['Financial Analysis','Excel','Financial Modeling','Budgeting','Forecasting','Accounting','Taxation','Audit','SAP','Tally','QuickBooks','GST','Balance Sheet','Cash Flow','Valuation'],
+                    'Human Resources': ['Recruitment','Talent Acquisition','HRIS','Workday','Payroll','Employee Engagement','Performance Management','Onboarding','Training & Development','Labor Law','Compensation & Benefits','Succession Planning'],
+                    'Operations Management': ['Process Improvement','Lean','Six Sigma','Operations Planning','Quality Control','KPI Management','ERP','SAP','Vendor Management','Inventory Management','Production Planning','SOP Development'],
+                    'Supply Chain Management': ['Logistics','Inventory Management','Procurement','Warehousing','Demand Planning','Supply Planning','Vendor Management','ERP','SAP SCM','Cost Optimization','Distribution','Transportation Management'],
+                    'Project Management': ['PMP','PRINCE2','Agile','Scrum','JIRA','MS Project','Risk Management','Stakeholder Management','Budget Management','Resource Planning','Gantt Charts','Sprint Planning','Project Delivery'],
+                    'Business Analysis': ['Requirements Gathering','BRD','FRD','Use Cases','Process Mapping','Gap Analysis','SQL','Tableau','Power BI','Stakeholder Analysis','UML','Data Analysis','Business Process Improvement'],
+                    'Entrepreneurship': ['Business Planning','Pitch Deck','Market Research','Fundraising','Growth Hacking','Business Model Canvas','Lean Startup','MVP Development','Customer Validation','Venture Capital','Financial Projections'],
+                    'Administration': ['Office Management','MS Office','Calendar Management','Data Entry','Filing','Records Management','Travel Arrangements','Meeting Coordination','Executive Support','Communication','Organizational Skills','Business Operations','Strategic Planning','Department Coordination'],
+                    'Education & Teaching': ['Curriculum Development','Lesson Planning','Classroom Management','E-Learning','LMS','Instructional Design','Student Assessment','Pedagogy','Educational Technology','Course Development','Training'],
+                    'Psychology & Counseling': ['Counseling','Psychotherapy','CBT','DBT','Assessment','Clinical Skills','Case Management','Mental Health','Behavioral Analysis','Client Assessment','Psychological Testing','Trauma-Informed Care'],
+                    'Law & Legal': ['Legal Research','Contract Law','Litigation','Compliance','Corporate Law','Legal Writing','Due Diligence','Case Analysis','Paralegal Skills','Regulatory Compliance','Intellectual Property','Dispute Resolution'],
+                    'Healthcare Management': ['Healthcare Administration','EMR/EHR','HIPAA','Medical Terminology','Healthcare IT','Hospital Management','Patient Care Coordination','ICD-10','Revenue Cycle','Quality Improvement','Telemedicine'],
+                    'Nursing': ['Patient Care','Clinical Skills','Medication Administration','Vital Signs','Nursing Assessment','Care Planning','IV Therapy','Wound Care','Emergency Care','ICU','Patient Education','Electronic Health Records'],
+                    'Medical Coding & Billing': ['ICD-10','CPT','HCPCS','Medical Billing','Claims Processing','Revenue Cycle','CPC Certification','Medical Terminology','Healthcare Billing','Insurance Claims','DRG','Coding Accuracy'],
+                    'Pharmacy': ['Drug Dispensing','Medication Therapy','Clinical Pharmacy','Pharmaceutical Care','Patient Counseling','Drug Interactions','Formulary Management','Pharmacy Operations','Compounding','Inventory Management'],
+                    'Graphic Design': ['Photoshop','Illustrator','InDesign','Canva','Typography','Branding','Logo Design','Visual Design','Color Theory','Print Design','Digital Design','Motion Graphics','Layout Design'],
+                    'Journalism & Media': ['News Writing','Reporting','Investigative Journalism','Press Releases','Editorial','Broadcasting','Multimedia','Interviewing','Fact-Checking','Feature Writing','News Production','AP Style'],
+                    'Content Writing': ['Content Writing','Copywriting','SEO Writing','Blog Writing','Technical Writing','Creative Writing','Content Strategy','Editing','Proofreading','Storytelling','Content Marketing','Web Content'],
+                }
+                
+                # Display recommendation based on best match
+                if best_category and max_count > 0:
+                    reco_field = best_category
+                    # Show different message based on whether job description was provided
+                    if job_description:
+                        st.success(f"** Based on the Job Description, recommended field: {best_category} **")
+                        label_text = '### Skills Required for this Job'
+                        help_text = 'Skills extracted from Job Description'
+                        tip_message = '''<h5 style='text-align: left; color: #1ed760;'>These skills match the job requirements. Add them to your resume to boost🚀 your chances!</h5>'''
+                    else:
+                        st.success(f"** Based on your Resume, you seem suited for {best_category} roles **")
+                        label_text = '### Recommended skills for you'
+                        help_text = 'Recommended skills generated from System'
+                        tip_message = '''<h5 style='text-align: left; color: #1ed760;'>Adding these skills to your resume will boost🚀 the chances of getting a Job💼</h5>'''
+                    
+                    recommended_skills = category_recommended_skills.get(best_category, [])
+                    recommended_keywords = st_tags(label=label_text,
+                        text=help_text,value=recommended_skills,key = 'reco_skills')
+                    st.markdown(tip_message,unsafe_allow_html=True)
+                    
+                    # Get course for the category
+                    course_data = category_matches[best_category]['course']
+                    if course_data:
+                        rec_course = course_recommender(course_data)
+                    else:
+                        rec_course = f"Check online platforms for {best_category} courses"
+                else:
+                    # No strong match found - show general skills
+                    reco_field = 'General Skills'
+                    st.info("** Your resume shows general professional skills. Consider specializing in a specific field for better career opportunities. **")
+                    recommended_skills = ['Communication','Leadership','Problem Solving','Time Management','Teamwork','Critical Thinking','Adaptability','Organization','Project Management']
+                    recommended_keywords = st_tags(label='### Recommended skills for you.',
+                        text='Recommended skills generated from System',value=recommended_skills,key = 'general')
+                    st.markdown('''<h5 style='text-align: left; color: #092851;'>Consider exploring specific career paths to stand out</h5>''',unsafe_allow_html=True)
+                    rec_course = course_recommender(soft_skills_course) if soft_skills_course else "Explore courses in your area of interest"
 
 
                 ## Resume Scorer & Resume Writing Tips
@@ -952,8 +1069,16 @@ def run():
                         # 1. Skills Match Score
                         resume_skills = set([skill.lower() for skill in resume_data.get('skills', [])])
                         
-                        # Extract skills from job description using the pre-defined keyword lists
-                        all_skill_keywords = ds_keyword + web_keyword + android_keyword + ios_keyword + uiux_keyword + n_any
+                        # Extract skills from job description using ALL pre-defined keyword lists
+                        all_skill_keywords = (ds_keyword + web_keyword + android_keyword + ios_keyword + uiux_keyword + 
+                                            genai_keyword + cloud_keyword + devops_keyword + cyber_keyword + data_eng_keyword +
+                                            qa_keyword + product_keyword + blockchain_keyword + marketing_keyword + sales_keyword +
+                                            finance_keyword + hr_keyword + operations_keyword + supply_chain_keyword + 
+                                            project_mgmt_keyword + business_analysis_keyword + entrepreneurship_keyword +
+                                            admin_keyword + education_keyword + psychology_keyword + law_keyword +
+                                            healthcare_keyword + nursing_keyword + medical_coding_keyword + pharmacy_keyword +
+                                            graphic_design_keyword + journalism_keyword + content_writing_keyword + n_any)
+                        
                         job_text_lower = job_description_text.lower()
                         job_skills = set()
                         for skill in all_skill_keywords:
@@ -1043,81 +1168,146 @@ def run():
                 st.subheader("**Resume Content Checklist & Tips 🥂**")
                 resume_score = 0
                 
-                ### Predicting Whether these key points are added to the resume
-                if 'Objective' in resume_text or 'Summary' in resume_text:
-                    resume_score = resume_score+6
-                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Awesome! You have added Objective/Summary</h4>''',unsafe_allow_html=True)                
+                # Convert resume text to lowercase for case-insensitive matching
+                resume_text_lower = resume_text.lower()
+                
+                # Check for experience first (needed for internship logic)
+                has_experience = 'experience' in resume_text_lower or 'work history' in resume_text_lower or 'employment' in resume_text_lower or 'worked at' in resume_text_lower or 'working at' in resume_text_lower
+                has_internship = 'internship' in resume_text_lower or 'intern ' in resume_text_lower or 'trainee' in resume_text_lower
+                
+                ### Essential Sections ###
+                st.markdown('''<h6 style='text-align: left; color: #4facfe; margin-top: 1rem;'>📋 Essential Sections</h6>''',unsafe_allow_html=True)
+                
+                # 1. Contact Information
+                if resume_data.get('email') or resume_data.get('mobile_number') or '@' in resume_text_lower or 'phone' in resume_text_lower or 'contact' in resume_text_lower:
+                    resume_score = resume_score + 8
+                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Contact information detected</h5>''',unsafe_allow_html=True)                
                 else:
-                    st.markdown('''<h5 style='text-align: left; color: #000000;'>[-] Please add your career objective, it will give your career intension to the Recruiters.</h4>''',unsafe_allow_html=True)
-
-                if 'Education' in resume_text or 'School' in resume_text or 'College' in resume_text:
-                    resume_score = resume_score + 12
-                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Awesome! You have added Education Details</h4>''',unsafe_allow_html=True)
-                else:
-                    st.markdown('''<h5 style='text-align: left; color: #000000;'>[-] Please add Education. It will give Your Qualification level to the recruiter</h4>''',unsafe_allow_html=True)
-
-                if 'EXPERIENCE' in resume_text or 'Experience' in resume_text:
-                    resume_score = resume_score + 16
-                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Awesome! You have added Experience</h4>''',unsafe_allow_html=True)
-                else:
-                    st.markdown('''<h5 style='text-align: left; color: #000000;'>[-] Please add Experience. It will help you to stand out from crowd</h4>''',unsafe_allow_html=True)
-
-                if 'INTERNSHIPS' in resume_text or 'INTERNSHIP' in resume_text or 'Internships' in resume_text or 'Internship' in resume_text:
+                    st.markdown('''<h5 style='text-align: left; color: #e74c3c;'>[-] Add contact info (email, phone) - recruiters need to reach you!</h5>''',unsafe_allow_html=True)
+                
+                # 2. Objective/Summary
+                if 'objective' in resume_text_lower or 'summary' in resume_text_lower or 'profile' in resume_text_lower or 'about me' in resume_text_lower:
                     resume_score = resume_score + 6
-                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Awesome! You have added Internships</h4>''',unsafe_allow_html=True)
+                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Career objective/summary included</h5>''',unsafe_allow_html=True)                
                 else:
-                    st.markdown('''<h5 style='text-align: left; color: #000000;'>[-] Please add Internships. It will help you to stand out from crowd</h4>''',unsafe_allow_html=True)
+                    st.markdown('''<h5 style='text-align: left; color: #e74c3c;'>[-] Add a career objective or professional summary - gives recruiters quick insight</h5>''',unsafe_allow_html=True)
 
-                if 'SKILLS' in resume_text or 'SKILL' in resume_text or 'Skills' in resume_text or 'Skill' in resume_text:
-                    resume_score = resume_score + 7
-                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Awesome! You have added Skills</h4>''',unsafe_allow_html=True)
-                else:
-                    st.markdown('''<h5 style='text-align: left; color: #000000;'>[-] Please add Skills. It will help you a lot</h4>''',unsafe_allow_html=True)
-
-                if 'HOBBIES' in resume_text or 'Hobbies' in resume_text:
-                    resume_score = resume_score + 4
-                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Awesome! You have added your Hobbies</h4>''',unsafe_allow_html=True)
-                else:
-                    st.markdown('''<h5 style='text-align: left; color: #000000;'>[-] Please add Hobbies. It will show your personality to the Recruiters and give the assurance that you are fit for this role or not.</h4>''',unsafe_allow_html=True)
-
-                if 'INTERESTS' in resume_text or 'Interests' in resume_text:
-                    resume_score = resume_score + 5
-                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Awesome! You have added your Interest</h4>''',unsafe_allow_html=True)
-                else:
-                    st.markdown('''<h5 style='text-align: left; color: #000000;'>[-] Please add Interest. It will show your interest other that job.</h4>''',unsafe_allow_html=True)
-
-                if 'ACHIEVEMENTS' in resume_text or 'Achievements' in resume_text:
-                    resume_score = resume_score + 13
-                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Awesome! You have added your Achievements </h4>''',unsafe_allow_html=True)
-                else:
-                    st.markdown('''<h5 style='text-align: left; color: #000000;'>[-] Please add Achievements. It will show that you are capable for the required position.</h4>''',unsafe_allow_html=True)
-
-                if 'CERTIFICATIONS' in resume_text or 'Certifications' in resume_text or 'Certification' in resume_text:
+                # 3. Education
+                if 'education' in resume_text_lower or 'school' in resume_text_lower or 'college' in resume_text_lower or 'university' in resume_text_lower or 'degree' in resume_text_lower or 'bachelor' in resume_text_lower or 'master' in resume_text_lower or 'b.tech' in resume_text_lower or 'b.e' in resume_text_lower or 'm.tech' in resume_text_lower:
                     resume_score = resume_score + 12
-                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Awesome! You have added your Certifications </h4>''',unsafe_allow_html=True)
+                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Education details included</h5>''',unsafe_allow_html=True)
                 else:
-                    st.markdown('''<h5 style='text-align: left; color: #000000;'>[-] Please add Certifications. It will show that you have done some specialization for the required position.</h4>''',unsafe_allow_html=True)
+                    st.markdown('''<h5 style='text-align: left; color: #e74c3c;'>[-] Add education details - shows your qualification level</h5>''',unsafe_allow_html=True)
 
-                if 'PROJECTS' in resume_text or 'PROJECT' in resume_text or 'Projects' in resume_text:
-                    resume_score = resume_score + 19
-                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Awesome! You have added your Projects</h4>''',unsafe_allow_html=True)
+                # 4. Experience OR Internship (smart check)
+                if has_experience:
+                    resume_score = resume_score + 16
+                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Work experience included - great for showcasing your professional background!</h5>''',unsafe_allow_html=True)
+                    # If experienced, internship is optional bonus
+                    if has_internship:
+                        resume_score = resume_score + 4
+                        st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Internship experience also included - shows your journey!</h5>''',unsafe_allow_html=True)
+                elif has_internship:
+                    # Fresher with internship
+                    resume_score = resume_score + 12
+                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Internship experience included - great start for your career!</h5>''',unsafe_allow_html=True)
+                    st.markdown('''<h5 style='text-align: left; color: #f39c12;'>[~] Consider gaining more work experience as you progress</h5>''',unsafe_allow_html=True)
                 else:
-                    st.markdown('''<h5 style='text-align: left; color: #000000;'>[-] Please add Projects. It will show that you have done some work related to the required position.</h4>''',unsafe_allow_html=True)
+                    # Neither experience nor internship
+                    st.markdown('''<h5 style='text-align: left; color: #e74c3c;'>[-] Add work experience or internships - crucial for recruiters</h5>''',unsafe_allow_html=True)
+
+                # 5. Skills
+                if 'skill' in resume_text_lower or 'proficient' in resume_text_lower or 'expertise' in resume_text_lower or 'competenc' in resume_text_lower or 'technical' in resume_text_lower or 'technologies' in resume_text_lower:
+                    resume_score = resume_score + 8
+                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Skills section included</h5>''',unsafe_allow_html=True)
+                else:
+                    st.markdown('''<h5 style='text-align: left; color: #e74c3c;'>[-] Add a skills section - helps ATS and recruiters find you</h5>''',unsafe_allow_html=True)
+
+                ### Value-Adding Sections ###
+                st.markdown('''<h6 style='text-align: left; color: #4facfe; margin-top: 1rem;'>⭐ Value-Adding Sections</h6>''',unsafe_allow_html=True)
+
+                # 6. Projects
+                if 'project' in resume_text_lower or 'developed' in resume_text_lower or 'built' in resume_text_lower or 'created' in resume_text_lower or 'implemented' in resume_text_lower:
+                    resume_score = resume_score + 12
+                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Projects section included - shows hands-on experience!</h5>''',unsafe_allow_html=True)
+                else:
+                    st.markdown('''<h5 style='text-align: left; color: #e74c3c;'>[-] Add projects - demonstrates practical skills and initiative</h5>''',unsafe_allow_html=True)
+
+                # 7. Achievements/Awards
+                if 'achievement' in resume_text_lower or 'award' in resume_text_lower or 'accomplish' in resume_text_lower or 'recognized' in resume_text_lower or 'honor' in resume_text_lower or 'won' in resume_text_lower or 'rank' in resume_text_lower:
+                    resume_score = resume_score + 10
+                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Achievements/Awards included - sets you apart!</h5>''',unsafe_allow_html=True)
+                else:
+                    st.markdown('''<h5 style='text-align: left; color: #f39c12;'>[~] Consider adding achievements or awards if you have any</h5>''',unsafe_allow_html=True)
+
+                # 8. Certifications
+                if 'certification' in resume_text_lower or 'certified' in resume_text_lower or 'certificate' in resume_text_lower or 'license' in resume_text_lower or 'course' in resume_text_lower:
+                    resume_score = resume_score + 8
+                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Certifications included - shows continuous learning!</h5>''',unsafe_allow_html=True)
+                else:
+                    st.markdown('''<h5 style='text-align: left; color: #f39c12;'>[~] Consider adding relevant certifications to boost credibility</h5>''',unsafe_allow_html=True)
+
+                ### Professional Polish ###
+                st.markdown('''<h6 style='text-align: left; color: #4facfe; margin-top: 1rem;'>✨ Professional Polish</h6>''',unsafe_allow_html=True)
+
+                # 9. LinkedIn Profile
+                if 'linkedin' in resume_text_lower or 'linkedin.com' in resume_text_lower:
+                    resume_score = resume_score + 5
+                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] LinkedIn profile included - great for networking!</h5>''',unsafe_allow_html=True)
+                else:
+                    st.markdown('''<h5 style='text-align: left; color: #f39c12;'>[~] Consider adding your LinkedIn profile URL</h5>''',unsafe_allow_html=True)
+
+                # 10. GitHub/Portfolio (for tech roles)
+                if 'github' in resume_text_lower or 'portfolio' in resume_text_lower or 'github.com' in resume_text_lower or 'behance' in resume_text_lower or 'dribbble' in resume_text_lower:
+                    resume_score = resume_score + 5
+                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Portfolio/GitHub included - showcases your work!</h5>''',unsafe_allow_html=True)
+                else:
+                    st.markdown('''<h5 style='text-align: left; color: #f39c12;'>[~] Consider adding GitHub or portfolio link to showcase your work</h5>''',unsafe_allow_html=True)
+
+                # 11. Languages
+                if 'language' in resume_text_lower or 'english' in resume_text_lower or 'hindi' in resume_text_lower or 'fluent' in resume_text_lower or 'proficient in' in resume_text_lower:
+                    resume_score = resume_score + 4
+                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Language proficiency mentioned</h5>''',unsafe_allow_html=True)
+                else:
+                    st.markdown('''<h5 style='text-align: left; color: #f39c12;'>[~] Consider mentioning language proficiencies</h5>''',unsafe_allow_html=True)
+
+                # 12. References
+                if 'reference' in resume_text_lower or 'available upon request' in resume_text_lower:
+                    resume_score = resume_score + 3
+                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] References section included</h5>''',unsafe_allow_html=True)
+                else:
+                    st.markdown('''<h5 style='text-align: left; color: #f39c12;'>[~] You may add "References available upon request"</h5>''',unsafe_allow_html=True)
+
+                # 13. Hobbies/Interests (optional)
+                if 'hobbies' in resume_text_lower or 'hobby' in resume_text_lower or 'interests' in resume_text_lower or 'extracurricular' in resume_text_lower or 'activities' in resume_text_lower:
+                    resume_score = resume_score + 3
+                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Hobbies/Interests included - shows personality!</h5>''',unsafe_allow_html=True)
+                else:
+                    st.markdown('''<h5 style='text-align: left; color: #f39c12;'>[~] Hobbies/Interests are optional but can show personality</h5>''',unsafe_allow_html=True)
+
+                # 14. Volunteer/Social Work
+                if 'volunteer' in resume_text_lower or 'social work' in resume_text_lower or 'community' in resume_text_lower or 'ngo' in resume_text_lower or 'nss' in resume_text_lower:
+                    resume_score = resume_score + 4
+                    st.markdown('''<h5 style='text-align: left; color: #1ed760;'>[+] Volunteer/Social work included - shows character!</h5>''',unsafe_allow_html=True)
+
+                # Cap the score at 100
+                resume_score = min(resume_score, 100)
                 
                 st.markdown("---")
                 
                 # Display overall resume score
                 st.markdown(f"""
                 <div class="chart-container">
-                    <h3 style="text-align: center; color: #333;">Resume Strength Score</h3>
-                    <p style="text-align: center; color: #666;">This score reflects the completeness of your resume's sections.</p>
+                    <h3 style="text-align: center; color: #333;">Resume Section Score</h3>
+                    <p style="text-align: center; color: #666;">This score shows how well your resume covers essential sections (Contact, Education, Skills, etc.) - NOT job match!</p>
+                    <p style="text-align: center; color: #f39c12; font-weight: bold;">📌 For Job Match Score, check the "Overall ATS Score" above (only available when you enter a Job Description)</p>
                 </div>
                 """, unsafe_allow_html=True)
                 
                 fig = go.Figure(go.Indicator(
                     mode = "gauge+number",
                     value = resume_score,
-                    title = {'text': "Completeness Score"},
+                    title = {'text': "Section Coverage"},
                     gauge = {'axis': {'range': [None, 100]}, 'bar': {'color': "#f5576c"}}))
                 fig.update_layout(height=250)
                 st.plotly_chart(fig, use_container_width=True)
