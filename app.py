@@ -1229,7 +1229,7 @@ def run():
         ad_password = st.text_input("🔑 Password", type="password")
         
         if st.button("Login"):
-            if ad_user == 'admin' and ad_password == 'admin@resume-analyzer':
+            if ad_user == 'admin' and ad_password == 'admin123':
                 st.success(f'Welcome {ad_user}')
                 
                 # Display Data
