@@ -497,7 +497,7 @@ def run():
     <div style="text-align: center; padding: 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; margin: 1rem 0;">
         <p style="color: white; font-weight: 600; margin: 0; font-size: 0.9rem;">
             ✨ Built with passion by<br>
-            <a href="https://jyotishyadav.netlify.app/" style="text-decoration: none; color: #ffd700; font-weight: 700;">Jyotish Yadav</a>
+            <a href= style="text-decoration: none; color: #ffd700; font-weight: 700;"></a>
         </p>
     </div>
     """, unsafe_allow_html=True)
