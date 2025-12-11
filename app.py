@@ -496,7 +496,7 @@ def run():
     st.sidebar.markdown("""
     <div style="text-align: center; padding: 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; margin: 1rem 0;">
         <p style="color: white; font-weight: 600; margin: 0; font-size: 0.9rem;">
-            ✨ Built with passion by<br>
+            ✨ Built with passion <br>
             <a href= style="text-decoration: none; color: #ffd700; font-weight: 700;"></a>
         </p>
     </div>
@@ -1217,47 +1217,110 @@ def run():
     ###### CODE FOR ADMIN SIDE (ADMIN) ######
     elif choice == 'Admin':
         
-        # Enhanced admin login
-        st.markdown("""
-        <div class="info-card">
-            <h3 style="color: #333; margin-top: 0;">🔐 Admin Login</h3>
-            <p style="color: #666; margin-bottom: 1rem;">This section is for authorized personnel only.</p>
-        </div>
-        """, unsafe_allow_html=True)
+        # Initialize session state for admin login
+        if 'admin_logged_in' not in st.session_state:
+            st.session_state.admin_logged_in = False
         
-        ad_user = st.text_input("👤 Username", type="default")
-        ad_password = st.text_input("🔑 Password", type="password")
+        # Show login form if not logged in
+        if not st.session_state.admin_logged_in:
+            # Enhanced admin login
+            st.markdown("""
+            <div class="info-card">
+                <h3 style="color: #333; margin-top: 0;">🔐 Admin Login</h3>
+                <p style="color: #666; margin-bottom: 1rem;">This section is for authorized personnel only.</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            ad_user = st.text_input("👤 Username", type="default")
+            ad_password = st.text_input("🔑 Password", type="password")
+            
+            if st.button("Login"):
+                if ad_user == 'admin' and ad_password == 'admin123':
+                    st.session_state.admin_logged_in = True
+                    st.rerun()
+                else:
+                    st.error("Wrong ID & Password Provided")
         
-        if st.button("Login"):
-            if ad_user == 'admin' and ad_password == 'admin123':
-                st.success(f'Welcome {ad_user}')
+        else:
+            # Admin is logged in - show dashboard
+            st.success('Welcome Admin!')
+            
+            # Logout button
+            if st.button("🚪 Logout"):
+                st.session_state.admin_logged_in = False
+                st.rerun()
+            
+            st.markdown("---")
+            
+            # Display Data
+            try:
+                cursor.execute('''SELECT * FROM user_data''')
+                data = cursor.fetchall()
+                st.header("**User's Data**")
+                df = pd.DataFrame(data, columns=['ID', 'Token', 'IP Address', 'Host Name', 'Device User',
+                                                'OS', 'Lat/Long', 'City', 'State', 'Country', 'User Name',
+                                                'User Mail', 'User Mobile', 'Resume Name', 'Resume Mail',
+                                                'Resume Score', 'Timestamp', 'Total Pages', 'Predicted Field',
+                                                'User Level', 'Skills', 'Recommended Skills', 'Recommended Courses',
+                                                'PDF Name'])
+                st.dataframe(df)
+                st.markdown(get_csv_download_link(df, 'User_Data.csv', 'Download Report'), unsafe_allow_html=True)
                 
-                # Display Data
-                try:
-                    cursor.execute('''SELECT * FROM user_data''')
-                    data = cursor.fetchall()
-                    st.header("**User's Data**")
-                    df = pd.DataFrame(data, columns=['ID', 'Token', 'IP Address', 'Host Name', 'Device User',
-                                                    'OS', 'Lat/Long', 'City', 'State', 'Country', 'User Name',
-                                                    'User Mail', 'User Mobile', 'Resume Name', 'Resume Mail',
-                                                    'Resume Score', 'Timestamp', 'Total Pages', 'Predicted Field',
-                                                    'User Level', 'Skills', 'Recommended Skills', 'Recommended Courses',
-                                                    'PDF Name'])
-                    st.dataframe(df)
-                    st.markdown(get_csv_download_link(df, 'User_Data.csv', 'Download Report'), unsafe_allow_html=True)
-                    
-                    # Display Feedbacks
-                    cursor.execute('''SELECT * FROM user_feedback''')
-                    data = cursor.fetchall()
-                    st.header("**User's Feedback Data**")
-                    df = pd.DataFrame(data, columns=['ID', 'Name', 'Email', 'Score', 'Comments', 'Timestamp'])
-                    st.dataframe(df)
-                    st.markdown(get_csv_download_link(df, 'Feedback_Data.csv', 'Download Report'), unsafe_allow_html=True)
-                except Exception as e:
-                    st.error(f"Failed to fetch data from the database: {e}")
-
-            else:
-                st.error("Wrong ID & Password Provided")
+                # Delete User Data Section
+                st.markdown("---")
+                st.subheader("🗑️ Delete User Data")
+                col1, col2 = st.columns(2)
+                with col1:
+                    if len(df) > 0:
+                        user_ids = df['ID'].tolist()
+                        selected_id = st.selectbox("Select User ID to Delete", user_ids, key="delete_user")
+                        if st.button("Delete Selected User", key="del_user_btn"):
+                            cursor.execute(f"DELETE FROM user_data WHERE ID = {selected_id}")
+                            connection.commit()
+                            st.success(f"User with ID {selected_id} deleted successfully!")
+                            st.rerun()
+                    else:
+                        st.info("No user data to delete")
+                with col2:
+                    if st.button("🗑️ Delete ALL User Data", key="del_all_users"):
+                        cursor.execute("DELETE FROM user_data")
+                        connection.commit()
+                        st.success("All user data deleted successfully!")
+                        st.rerun()
+                
+                # Display Feedbacks
+                st.markdown("---")
+                cursor.execute('''SELECT * FROM user_feedback''')
+                data = cursor.fetchall()
+                st.header("**User's Feedback Data**")
+                df_feedback = pd.DataFrame(data, columns=['ID', 'Name', 'Email', 'Score', 'Comments', 'Timestamp'])
+                st.dataframe(df_feedback)
+                st.markdown(get_csv_download_link(df_feedback, 'Feedback_Data.csv', 'Download Report'), unsafe_allow_html=True)
+                
+                # Delete Feedback Section
+                st.markdown("---")
+                st.subheader("🗑️ Delete Feedback Data")
+                col3, col4 = st.columns(2)
+                with col3:
+                    if len(df_feedback) > 0:
+                        feedback_ids = df_feedback['ID'].tolist()
+                        selected_feedback_id = st.selectbox("Select Feedback ID to Delete", feedback_ids, key="delete_feedback")
+                        if st.button("Delete Selected Feedback", key="del_feedback_btn"):
+                            cursor.execute(f"DELETE FROM user_feedback WHERE ID = {selected_feedback_id}")
+                            connection.commit()
+                            st.success(f"Feedback with ID {selected_feedback_id} deleted successfully!")
+                            st.rerun()
+                    else:
+                        st.info("No feedback data to delete")
+                with col4:
+                    if st.button("🗑️ Delete ALL Feedback Data", key="del_all_feedback"):
+                        cursor.execute("DELETE FROM user_feedback")
+                        connection.commit()
+                        st.success("All feedback data deleted successfully!")
+                        st.rerun()
+                        
+            except Exception as e:
+                st.error(f"Failed to fetch data from the database: {e}")
 
 # main function call
 if __name__ == '__main__':
