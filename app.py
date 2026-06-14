@@ -125,7 +125,7 @@ def pdf_reader(file):
     with open(file, 'rb') as fh:
         for page in PDFPage.get_pages(fh,
                                       caching=True,
-                                      check_extractable=True):
+                                      check_extractable=False):
             page_interpreter.process_page(page)
         text = fake_file_handle.getvalue()
 
@@ -237,24 +237,30 @@ def fallback_resume_parser(resume_text, pdf_name):
     # Extract degree (comprehensive pattern matching - try full names FIRST, then abbreviations)
     # All patterns use \b word boundaries to prevent false matches like 'web technology'
     # bachelor/bachelors and master/masters both handled with s?
+    
+    # Helper pattern to capture the major/specialization (e.g. "in Computer Engineering")
+    # Excludes common noise like "CGPA", "GPA", "Grade", "Class", "Sem", "Year", "Upto", etc.
+    in_major = r'(?:\s+in\s+(?!cgpa|gpa|grade|class|sem|year|percent|from|at|by|with)[a-zA-Z]{2,20}(?:\s+(?:and|&|/)\s+)?(?:\s+(?!cgpa|gpa|grade|class|sem|year|percent|from|at|by|with)[a-zA-Z]{2,20}){0,2})?'
+    
     degree_patterns = [
         # Full degree names with field (most specific first)
-        r'\bbachelors?\s*(?:of)?\s*technology\b',
-        r'\bbachelors?\s*(?:of)?\s*engineering\b',
-        r'\bbachelors?\s*(?:of)?\s*computer\s*(?:science|engineering|application)\b',
-        r'\bbachelors?\s*(?:of)?\s*(?:science|arts|commerce|business\s*administration)\b',
-        r'\bmasters?\s*(?:of)?\s*technology\b',
-        r'\bmasters?\s*(?:of)?\s*engineering\b',
-        r'\bmasters?\s*(?:of)?\s*computer\s*(?:science|engineering|application)\b',
-        r'\bmasters?\s*(?:of)?\s*(?:science|arts|commerce|business\s*administration)\b',
+        r'\bbachelor\'?s?\s*(?:of)?\s*technology' + in_major + r'\b',
+        r'\bbachelor\'?s?\s*(?:of)?\s*engineering' + in_major + r'\b',
+        r'\bbachelor\'?s?\s*(?:of)?\s*computer\s*(?:science|engineering|application)' + in_major + r'\b',
+        r'\bbachelor\'?s?\s*(?:of)?\s*(?:science|arts|commerce|business\s*administration)' + in_major + r'\b',
+        r'\bmaster\'?s?\s*(?:of)?\s*technology' + in_major + r'\b',
+        r'\bmaster\'?s?\s*(?:of)?\s*engineering' + in_major + r'\b',
+        r'\bmaster\'?s?\s*(?:of)?\s*computer\s*(?:science|engineering|application)' + in_major + r'\b',
+        r'\bmaster\'?s?\s*(?:of)?\s*(?:science|arts|commerce|business\s*administration)' + in_major + r'\b',
         r'\bdoctors?\s*(?:of)?\s*philosophy\b',
         # B.Tech / M.Tech abbreviations (strict word boundary)
-        r'\bb\.?\s*tech(?:nology)?\b',
-        r'\bm\.?\s*tech(?:nology)?\b',
+        r'\bb\.?\s*tech(?:nology)?' + in_major + r'\b',
+        r'\bm\.?\s*tech(?:nology)?' + in_major + r'\b',
         # Other common abbreviations
-        r'\bb\.?\s*e\.?\b(?:\s+in\b)?',
-        r'\bm\.?\s*e\.?\b(?:\s+in\b)?',
-        r'\bb\.?\s*sc\b', r'\bm\.?\s*sc\b',
+        r'\bb\.?\s*e\.?' + in_major + r'\b',
+        r'\bm\.?\s*e\.?' + in_major + r'\b',
+        r'\bb\.?\s*sc' + in_major + r'\b',
+        r'\bm\.?\s*sc' + in_major + r'\b',
         r'\bb\.?\s*c\.?a\.?\b', r'\bm\.?\s*c\.?a\.?\b',
         r'\bb\.?\s*com\b', r'\bm\.?\s*com\b',
         r'\bb\.?\s*b\.?\s*a\.?\b',
@@ -814,12 +820,18 @@ def run():
                     if fb.get('degree', '').strip():
                         resume_data['degree'] = fb['degree']
                 
-                # If degree is still a list (pyresparser format), convert to string
-                if isinstance(resume_data.get('degree'), list):
-                    if resume_data['degree']:
-                        resume_data['degree'] = ', '.join(str(d) for d in resume_data['degree'])
+                # Robust validation and formatting for all output fields
+                for key in ['name', 'email', 'mobile_number', 'degree']:
+                    val = resume_data.get(key)
+                    if isinstance(val, list):
+                        if val:
+                            resume_data[key] = ', '.join(str(item).strip() for item in val if str(item).strip())
+                        else:
+                            resume_data[key] = 'Not detected'
+                    elif val is None or not str(val).strip() or str(val).lower() == 'none':
+                        resume_data[key] = 'Not detected'
                     else:
-                        resume_data['degree'] = 'Not detected'
+                        resume_data[key] = str(val).strip()
             
             # Show user-friendly message based on result
             if not resume_data:
@@ -1492,6 +1504,20 @@ def run():
                         
                         skills_match_score = (len(matching_skills) / len(job_skills)) * 100 if job_skills else 0
                         scores['skills_match'] = min(int(skills_match_score), 100)
+                        
+                        # Fallback: if no job skills detected, try simple word matching
+                        if len(job_skills) == 0:
+                            # Look for common tech keywords using simple substring matching
+                            tech_fallback = ['python', 'java', 'javascript', 'sql', 'react', 'angular', 'docker', 'aws', 
+                                           'azure', 'linux', 'git', 'agile', 'rest', 'api', 'database', 'html', 'css', 
+                                           'node', 'flask', 'spring', 'kubernetes', 'jenkins', 'selenium', 'testing']
+                            job_tech = set([t for t in tech_fallback if t in job_text_lower])
+                            resume_tech = set([t for t in tech_fallback if t in resume_text_lower_jd])
+                            
+                            if job_tech:
+                                matching_tech = resume_tech.intersection(job_tech)
+                                scores['skills_match'] = int((len(matching_tech) / len(job_tech)) * 100) if job_tech else 0
+                                scores['missing_skills'] = list(job_tech - resume_tech)
 
                         # 2. Keyword Alignment Score
                         resume_words = set(re.findall(r'\w+', resume_text.lower()))
@@ -1526,9 +1552,12 @@ def run():
                             mode = "gauge+number",
                             value = analysis_scores['skills_match'],
                             title = {'text': "Skills Match"},
+                            domain = {'x': [0, 1], 'y': [0, 1]},
                             gauge = {'axis': {'range': [None, 100]}, 'bar': {'color': "#4facfe"}}))
-                        fig.update_layout(height=250)
+                        fig.update_layout(height=250, margin=dict(l=0, r=0, t=30, b=0))
                         st.plotly_chart(fig, use_container_width=True)
+                        if analysis_scores['skills_match'] == 0:
+                            st.info("💡 **Skills Match is 0** — No matching skills found between your resume and the job description. Add more technical keywords to your resume that match the job posting.")
                     with col2:
                         fig = go.Figure(go.Indicator(
                             mode = "gauge+number",
