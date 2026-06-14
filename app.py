@@ -235,37 +235,45 @@ def fallback_resume_parser(resume_text, pdf_name):
     
     resume_data['skills'] = found_skills[:10]  # Limit to 10 skills
     
-    # Extract degree (comprehensive pattern matching)
+    # Extract degree (comprehensive pattern matching - try full names FIRST, then abbreviations)
+    # All patterns use \b word boundaries to prevent false matches like 'web technology'
+    # bachelor/bachelors and master/masters both handled with s?
     degree_patterns = [
-        # Full degree names
-        r'bachelor\s*(?:of)?\s*(?:science|arts|engineering|technology|commerce|computer\s*application|business\s*administration)',
-        r'master\s*(?:of)?\s*(?:science|arts|engineering|technology|commerce|computer\s*application|business\s*administration)',
-        r'doctor\s*(?:of)?\s*philosophy',
-        # Common abbreviations (Indian education system)
-        r'\bb\.?\s*tech\b', r'\bm\.?\s*tech\b',
-        r'\bb\.?\s*e\.?\b', r'\bm\.?\s*e\.?\b',
+        # Full degree names with field (most specific first)
+        r'\bbachelors?\s*(?:of)?\s*technology\b',
+        r'\bbachelors?\s*(?:of)?\s*engineering\b',
+        r'\bbachelors?\s*(?:of)?\s*computer\s*(?:science|engineering|application)\b',
+        r'\bbachelors?\s*(?:of)?\s*(?:science|arts|commerce|business\s*administration)\b',
+        r'\bmasters?\s*(?:of)?\s*technology\b',
+        r'\bmasters?\s*(?:of)?\s*engineering\b',
+        r'\bmasters?\s*(?:of)?\s*computer\s*(?:science|engineering|application)\b',
+        r'\bmasters?\s*(?:of)?\s*(?:science|arts|commerce|business\s*administration)\b',
+        r'\bdoctors?\s*(?:of)?\s*philosophy\b',
+        # B.Tech / M.Tech abbreviations (strict word boundary)
+        r'\bb\.?\s*tech(?:nology)?\b',
+        r'\bm\.?\s*tech(?:nology)?\b',
+        # Other common abbreviations
+        r'\bb\.?\s*e\.?\b(?:\s+in\b)?',
+        r'\bm\.?\s*e\.?\b(?:\s+in\b)?',
         r'\bb\.?\s*sc\b', r'\bm\.?\s*sc\b',
         r'\bb\.?\s*c\.?a\.?\b', r'\bm\.?\s*c\.?a\.?\b',
         r'\bb\.?\s*com\b', r'\bm\.?\s*com\b',
-        r'\bb\.?\s*a\.?\b(?:\s+(?:in|from|degree))',
-        r'\bm\.?\s*a\.?\b(?:\s+(?:in|from|degree))',
-        r'\bb\.?\s*b\.?\s*a\.?\b',  # BBA
+        r'\bb\.?\s*b\.?\s*a\.?\b',
         r'\bmba\b', r'\bphd\b', r'\bph\.?\s*d\b',
-        r'\bdiploma\b', r'\bpgdm\b', r'\bpgdca\b',
+        r'\bdiploma\b',
+        r'\bpgdm\b', r'\bpgdca\b',
         r'\bb\.?\s*des\b', r'\bm\.?\s*des\b',
         r'\bb\.?\s*arch\b', r'\bm\.?\s*arch\b',
         r'\bb\.?\s*pharm\b', r'\bm\.?\s*pharm\b',
         r'\bb\.?\s*ed\b', r'\bm\.?\s*ed\b',
-        r'\bbachelor', r'\bmaster',
-        r'\bengineering\s+degree', r'\bdegree\s+in',
     ]
     
     for pattern in degree_patterns:
         match = re.search(pattern, resume_text_lower)
         if match:
             degree_text = match.group().strip()
-            # Clean up and title-case
-            resume_data['degree'] = degree_text.title().replace('.', '.').strip()
+            # Title-case and clean up
+            resume_data['degree'] = degree_text.title().strip()
             break
     
     return resume_data
@@ -801,21 +809,19 @@ def run():
                     if fb.get('name', '').strip():
                         resume_data['name'] = fb['name']
                 
-                # Validate degree: if pyresparser missed it, try fallback
-                parsed_degree = resume_data.get('degree', None)
-                if (not parsed_degree or str(parsed_degree).strip().lower() in ['', 'none', 'not detected', '[]']) and raw_text:
+                # Always re-extract degree using our fallback (correct priority order: B.Tech > M.Tech)
+                # pyresparser often picks wrong degree when resume mentions multiple
+                if raw_text:
                     fb = fallback_resume_parser(raw_text, pdf_file.name)
                     if fb.get('degree', '').strip():
                         resume_data['degree'] = fb['degree']
                 
-                # If degree is a list (pyresparser returns list), convert to string
+                # If degree is still a list (pyresparser format), convert to string
                 if isinstance(resume_data.get('degree'), list):
                     if resume_data['degree']:
                         resume_data['degree'] = ', '.join(str(d) for d in resume_data['degree'])
                     else:
-                        if raw_text:
-                            fb = fallback_resume_parser(raw_text, pdf_file.name)
-                            resume_data['degree'] = fb.get('degree', 'Not detected')
+                        resume_data['degree'] = 'Not detected'
             
             # Show user-friendly message based on result
             if not resume_data:
@@ -1162,7 +1168,34 @@ def run():
                         help_text = 'Recommended skills generated from System'
                         tip_message = '''<h5 style='text-align: left; color: #1ed760;'>Adding these skills to your resume will boost🚀 the chances of getting a Job💼</h5>'''
                     
-                    recommended_skills = category_recommended_skills.get(best_category, [])
+                    recommended_skills = []
+                    if job_description:
+                        # When JD provided: extract actual skills FROM the JD text
+                        jd_lower = job_description.lower()
+                        all_possible_skills = []
+                        for cat, skills_list in category_recommended_skills.items():
+                            all_possible_skills.extend(skills_list)
+                        # Also check against the category keyword lists used for matching
+                        for cat, data in category_matches.items():
+                            for kw in data['keywords']:
+                                if kw not in all_possible_skills:
+                                    all_possible_skills.append(kw)
+                        # Find which skills are actually mentioned in the JD
+                        jd_skills_found = []
+                        seen = set()
+                        for skill in all_possible_skills:
+                            skill_key = skill.lower().strip()
+                            if skill_key not in seen and skill_key in jd_lower:
+                                jd_skills_found.append(skill)
+                                seen.add(skill_key)
+                        # If we found JD skills, use them; otherwise fall back to category defaults
+                        if jd_skills_found:
+                            recommended_skills = jd_skills_found
+                        else:
+                            recommended_skills = category_recommended_skills.get(best_category, [])
+                    else:
+                        recommended_skills = category_recommended_skills.get(best_category, [])
+                    
                     recommended_keywords = st_tags(label=label_text,
                         text=help_text,value=recommended_skills,key = 'reco_skills')
                     st.markdown(tip_message,unsafe_allow_html=True)
@@ -1224,9 +1257,7 @@ def run():
                         """, unsafe_allow_html=True)
 
                         kw_field = reco_field if reco_field else 'Not detected'
-                        kw_score_display = resume_score if 'resume_score' in dir() and resume_score else 'N/A'
                         kw_matches = max_count if 'max_count' in dir() and max_count else 0
-                        kw_level = cand_level if 'cand_level' in dir() and cand_level else 'N/A'
                         kw_skills_cnt = len(resume_data.get('skills', [])) if resume_data else 0
 
                         st.markdown(f"""
@@ -1237,14 +1268,6 @@ def run():
                         <div style='background:rgba(255,255,255,0.05); border-radius:10px; padding:14px; margin:6px 0;'>
                             <p style='color:#94a3b8; margin:0 0 4px 0; font-size:0.75rem; text-transform:uppercase; letter-spacing:1px;'>Keyword Matches</p>
                             <p style='color:#60a5fa; margin:0; font-size:1.3rem; font-weight:700;'>{kw_matches} keywords matched</p>
-                        </div>
-                        <div style='background:rgba(255,255,255,0.05); border-radius:10px; padding:14px; margin:6px 0;'>
-                            <p style='color:#94a3b8; margin:0 0 4px 0; font-size:0.75rem; text-transform:uppercase; letter-spacing:1px;'>Resume Score</p>
-                            <p style='color:#e2e8f0; margin:0; font-size:1.3rem; font-weight:700;'>{kw_score_display}/100</p>
-                        </div>
-                        <div style='background:rgba(255,255,255,0.05); border-radius:10px; padding:14px; margin:6px 0;'>
-                            <p style='color:#94a3b8; margin:0 0 4px 0; font-size:0.75rem; text-transform:uppercase; letter-spacing:1px;'>Candidate Level</p>
-                            <p style='color:#93c5fd; margin:0; font-size:1rem; font-weight:600;'>{kw_level}</p>
                         </div>
                         <div style='background:rgba(255,255,255,0.05); border-radius:10px; padding:14px; margin:6px 0;'>
                             <p style='color:#94a3b8; margin:0 0 4px 0; font-size:0.75rem; text-transform:uppercase; letter-spacing:1px;'>Skills Found</p>
@@ -1370,27 +1393,21 @@ def run():
                             'Confidence',
                             'Resume Score',
                             'Resume Grade',
-                            'Candidate Level',
-                            'Skills Detected',
-                            'Result Agreement'
+                            'Skills Detected'
                         ],
                         '🔑 Keyword Analysis': [
                             reco_field if reco_field else 'Not detected',
-                            f'{max_count} keyword matches' if 'max_count' in dir() and max_count else 'Keyword count',
-                            f'{resume_score}/100' if 'resume_score' in dir() and resume_score else 'N/A',
-                            kw_grade,
-                            kw_level,
-                            f'{kw_skills_count} skills found',
-                            kw_match
+                            f'{max_count} keyword matches' if 'max_count' in dir() and max_count else 'N/A',
+                            'Computed below ↓',
+                            'Computed below ↓',
+                            f'{kw_skills_count} skills found'
                         ],
                         '🤖 ML Prediction': [
                             ml_category,
                             f'{ml_confidence}%',
                             f'{ml_score}/100',
                             ml_grade,
-                            'ML-derived',
-                            f'TF-IDF + {len(resume_data.get("skills", []))} features' if resume_data else 'N/A',
-                            kw_match
+                            f'{len(resume_data.get("skills", []))} skills analyzed' if resume_data else 'N/A'
                         ]
                     }
                     st.dataframe(
@@ -1436,9 +1453,11 @@ def run():
                         }
 
                         # 1. Skills Match Score
+                        # Start with pyresparser-detected skills
                         resume_skills = set([skill.lower() for skill in resume_data.get('skills', [])])
                         
-                        # Extract skills from job description using ALL pre-defined keyword lists
+                        # ALSO extract skills from full resume text using ALL keyword lists
+                        # (pyresparser often misses many skills)
                         all_skill_keywords = (ds_keyword + web_keyword + android_keyword + ios_keyword + uiux_keyword + 
                                             genai_keyword + cloud_keyword + devops_keyword + cyber_keyword + data_eng_keyword +
                                             qa_keyword + product_keyword + blockchain_keyword + marketing_keyword + sales_keyword +
@@ -1448,15 +1467,21 @@ def run():
                                             healthcare_keyword + nursing_keyword + medical_coding_keyword + pharmacy_keyword +
                                             graphic_design_keyword + journalism_keyword + content_writing_keyword + n_any)
                         
+                        resume_text_lower_jd = resume_text.lower()
+                        for skill in all_skill_keywords:
+                            if re.search(r'\b' + re.escape(skill.lower()) + r'\b', resume_text_lower_jd):
+                                resume_skills.add(skill.lower())
+                            elif ' ' not in skill and len(skill) > 2:
+                                if skill.lower() in resume_text_lower_jd:
+                                    resume_skills.add(skill.lower())
+                        
+                        # Extract skills from job description using same keyword lists
                         job_text_lower = job_description_text.lower()
                         job_skills = set()
                         for skill in all_skill_keywords:
-                            # Try exact word boundary match first
                             if re.search(r'\b' + re.escape(skill.lower()) + r'\b', job_text_lower):
                                 job_skills.add(skill.lower())
-                            # For single-word skills, also try flexible matching
                             elif ' ' not in skill and len(skill) > 2:
-                                # For abbreviations and short keywords, do case-insensitive substring matching
                                 if skill.lower() in job_text_lower:
                                     job_skills.add(skill.lower())
 

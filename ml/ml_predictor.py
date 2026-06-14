@@ -1,4 +1,4 @@
-﻿"""
+"""
 ML Predictor Module
 ===================
 Loads pre-trained models and provides clean prediction API for app.py.
@@ -101,15 +101,35 @@ def predict_job_role(resume_text: str) -> dict:
     text = resume_text.lower().strip()
     if not text:
         return {"category": "Unknown", "confidence": 0.0, "top3": []}
+    
+    # Map vague ML category names to user-friendly descriptions
+    FRIENDLY_NAMES = {
+        'Technology': 'Software Development / IT',
+        'Information Services': 'IT Services & Support',
+        'Administration': 'Office Administration',
+        'Conservation': 'Environmental Conservation',
+        'Consulting': 'Management Consulting',
+        'Private Sector Management': 'Business Management',
+        'Skilled Trades': 'Skilled Trades & Technical Work',
+        'Human Services & Social Work': 'Social Work & Counseling',
+        'Media Production': 'Media & Content Production',
+    }
+    
     if hasattr(_role_model, "predict_proba"):
         proba = _role_model.predict_proba([text])[0]
         top_idx = np.argsort(proba)[::-1][:3]
-        top3 = [(str(_label_enc.classes_[i]), round(float(proba[i]) * 100, 1)) for i in top_idx]
-        category   = str(_label_enc.classes_[top_idx[0]])
+        top3 = []
+        for i in top_idx:
+            raw_name = str(_label_enc.classes_[i])
+            friendly = FRIENDLY_NAMES.get(raw_name, raw_name)
+            top3.append((friendly, round(float(proba[i]) * 100, 1)))
+        raw_category = str(_label_enc.classes_[top_idx[0]])
+        category   = FRIENDLY_NAMES.get(raw_category, raw_category)
         confidence = round(float(proba[top_idx[0]]) * 100, 1)
     else:
         pred = _role_model.predict([text])[0]
-        category   = str(_label_enc.inverse_transform([pred])[0])
+        raw_category = str(_label_enc.inverse_transform([pred])[0])
+        category   = FRIENDLY_NAMES.get(raw_category, raw_category)
         confidence = 75.0
         top3       = [(category, confidence)]
     return {"category": category, "confidence": confidence, "top3": top3}
