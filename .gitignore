@@ -35,5 +35,6 @@ Thumbs.db
 *.log
 
 # Machine learning models
-ml/*.pkl
+ml/*.pkl 
+score_models/*.pkl
 
