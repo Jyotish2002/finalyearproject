@@ -34,3 +34,6 @@ Thumbs.db
 # Logs
 *.log
 
+# Machine learning models
+ml/*.pkl
+
