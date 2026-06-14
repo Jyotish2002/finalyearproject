@@ -35,13 +35,25 @@ _metrics      = None
 def _load_models():
     global _role_model, _score_bundle, _label_enc, _metrics
     if _role_model is None and os.path.exists(ROLE_MODEL_PATH):
-        _role_model = joblib.load(ROLE_MODEL_PATH)
+        try:
+            _role_model = joblib.load(ROLE_MODEL_PATH)
+        except Exception:
+            _role_model = None  # corrupted file — treat as missing
     if _score_bundle is None and os.path.exists(SCORE_MODEL_PATH):
-        _score_bundle = joblib.load(SCORE_MODEL_PATH)
+        try:
+            _score_bundle = joblib.load(SCORE_MODEL_PATH)
+        except Exception:
+            _score_bundle = None
     if _label_enc is None and os.path.exists(LABEL_ENC_PATH):
-        _label_enc = joblib.load(LABEL_ENC_PATH)
+        try:
+            _label_enc = joblib.load(LABEL_ENC_PATH)
+        except Exception:
+            _label_enc = None
     if _metrics is None and os.path.exists(METRICS_PATH):
-        _metrics = joblib.load(METRICS_PATH)
+        try:
+            _metrics = joblib.load(METRICS_PATH)
+        except Exception:
+            _metrics = None
 
 
 def is_ml_ready() -> bool:
