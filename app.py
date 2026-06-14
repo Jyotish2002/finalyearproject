@@ -45,6 +45,20 @@ except Exception:
     nursing_course = medical_coding_course = pharmacy_course = graphic_design_course = []
     journalism_course = content_writing_course = soft_skills_course = []
 
+# ML Predictor (graceful fallback if models not trained yet)
+try:
+    import sys as _sys
+    import os as _os
+    _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+    from ml.ml_predictor import predict_job_role, predict_score, is_ml_ready, get_model_metrics
+    ML_MODULE_LOADED = True
+except Exception as _ml_err:
+    ML_MODULE_LOADED = False
+    def is_ml_ready(): return False
+    def predict_job_role(t): return {}
+    def predict_score(t): return {}
+    def get_model_metrics(): return {}
+
 import nltk
 from nltk.corpus import stopwords
 import re
@@ -151,16 +165,57 @@ def fallback_resume_parser(resume_text, pdf_name):
         resume_data['mobile_number'] = phones[0]
     
     # Extract name (usually in the first few lines)
+    # Common Indian city names and non-name words to skip
+    skip_words = {
+        'kolkata', 'mumbai', 'delhi', 'bangalore', 'bengaluru', 'chennai',
+        'hyderabad', 'pune', 'ahmedabad', 'jaipur', 'lucknow', 'kanpur',
+        'nagpur', 'indore', 'thane', 'bhopal', 'visakhapatnam', 'patna',
+        'vadodara', 'ghaziabad', 'ludhiana', 'agra', 'nashik', 'faridabad',
+        'meerut', 'rajkot', 'varanasi', 'srinagar', 'aurangabad', 'dhanbad',
+        'amritsar', 'noida', 'gurgaon', 'gurugram', 'chandigarh', 'ranchi',
+        'howrah', 'coimbatore', 'vijayawada', 'madurai', 'jodhpur', 'raipur',
+        'kochi', 'kota', 'guwahati', 'solapur', 'tiruchirappalli', 'bareilly',
+        'moradabad', 'mysore', 'tiruppur', 'jalandhar', 'salem', 'bhubaneswar',
+        'aligarh', 'gorakhpur', 'warangal', 'dehradun', 'durgapur', 'asansol',
+        'navi mumbai', 'new delhi', 'greater noida', 'india', 'west bengal',
+        'maharashtra', 'karnataka', 'tamil nadu', 'uttar pradesh', 'bihar',
+        'address', 'phone', 'mobile', 'email', 'contact', 'objective',
+        'summary', 'experience', 'education', 'skills', 'projects',
+        'certifications', 'declaration', 'references', 'hobbies',
+        'personal details', 'about me', 'career objective', 'work experience',
+        'resume', 'cv', 'curriculum vitae', 'profile', 'www', 'http',
+        'linkedin', 'github'
+    }
     lines = resume_text.split('\n')
-    for line in lines[:10]:  # Check first 10 lines
+    for line in lines[:15]:  # Check first 15 lines
         line = line.strip()
-        if len(line) > 2 and len(line) < 50 and not any(char.isdigit() for char in line):
-            # Skip lines with email or phone
-            if '@' not in line and not re.search(r'\d{3}[-.\s]?\d{3}[-.\s]?\d{4}', line):
-                # Skip common headers
-                if line.lower() not in ['resume', 'cv', 'curriculum vitae', 'profile', 'objective']:
-                    resume_data['name'] = line
-                    break
+        # Name should be 2-50 chars, no digits, no special chars (except . and -)
+        if len(line) < 2 or len(line) > 50:
+            continue
+        if any(char.isdigit() for char in line):
+            continue
+        if '@' in line or '/' in line or ':' in line or '|' in line:
+            continue
+        # Skip if it matches a known non-name word
+        line_lower = line.lower().strip()
+        if line_lower in skip_words:
+            continue
+        # Skip if any word in the line is a city name (e.g. "Kolkata Yadav")
+        words = line_lower.split()
+        if any(w in skip_words for w in words):
+            continue
+        # Skip lines that look like addresses (contain comma + place)
+        if ',' in line and any(c in line_lower for c in ['india', 'west bengal', 'maharashtra', 'delhi']):
+            continue
+        # Skip common section headers
+        if line_lower in skip_words:
+            continue
+        # Skip very short single-word lines (likely labels)
+        if len(words) == 1 and len(line) < 4:
+            continue
+        # This line looks like a name
+        resume_data['name'] = line.title()
+        break
     
     # Extract skills (basic keyword matching)
     skill_keywords = [
@@ -180,18 +235,37 @@ def fallback_resume_parser(resume_text, pdf_name):
     
     resume_data['skills'] = found_skills[:10]  # Limit to 10 skills
     
-    # Extract degree (basic pattern matching)
+    # Extract degree (comprehensive pattern matching)
     degree_patterns = [
-        r'bachelor.*?(?:computer science|engineering|technology|science)',
-        r'master.*?(?:computer science|engineering|technology|science)',
-        r'phd.*?(?:computer science|engineering|technology|science)',
-        r'b\.?tech|m\.?tech|b\.?sc|m\.?sc|b\.?com|m\.?com|mba|phd'
+        # Full degree names
+        r'bachelor\s*(?:of)?\s*(?:science|arts|engineering|technology|commerce|computer\s*application|business\s*administration)',
+        r'master\s*(?:of)?\s*(?:science|arts|engineering|technology|commerce|computer\s*application|business\s*administration)',
+        r'doctor\s*(?:of)?\s*philosophy',
+        # Common abbreviations (Indian education system)
+        r'\bb\.?\s*tech\b', r'\bm\.?\s*tech\b',
+        r'\bb\.?\s*e\.?\b', r'\bm\.?\s*e\.?\b',
+        r'\bb\.?\s*sc\b', r'\bm\.?\s*sc\b',
+        r'\bb\.?\s*c\.?a\.?\b', r'\bm\.?\s*c\.?a\.?\b',
+        r'\bb\.?\s*com\b', r'\bm\.?\s*com\b',
+        r'\bb\.?\s*a\.?\b(?:\s+(?:in|from|degree))',
+        r'\bm\.?\s*a\.?\b(?:\s+(?:in|from|degree))',
+        r'\bb\.?\s*b\.?\s*a\.?\b',  # BBA
+        r'\bmba\b', r'\bphd\b', r'\bph\.?\s*d\b',
+        r'\bdiploma\b', r'\bpgdm\b', r'\bpgdca\b',
+        r'\bb\.?\s*des\b', r'\bm\.?\s*des\b',
+        r'\bb\.?\s*arch\b', r'\bm\.?\s*arch\b',
+        r'\bb\.?\s*pharm\b', r'\bm\.?\s*pharm\b',
+        r'\bb\.?\s*ed\b', r'\bm\.?\s*ed\b',
+        r'\bbachelor', r'\bmaster',
+        r'\bengineering\s+degree', r'\bdegree\s+in',
     ]
     
     for pattern in degree_patterns:
         match = re.search(pattern, resume_text_lower)
         if match:
-            resume_data['degree'] = match.group().title()
+            degree_text = match.group().strip()
+            # Clean up and title-case
+            resume_data['degree'] = degree_text.title().replace('.', '.').strip()
             break
     
     return resume_data
@@ -692,6 +766,57 @@ def run():
                 except Exception:
                     resume_data = None
             
+            # ── Post-parse validation: fix bad name/degree from pyresparser ──
+            if resume_data:
+                try:
+                    raw_text = pdf_reader(save_image_path)
+                except Exception:
+                    raw_text = ""
+                
+                # Validate name: check if pyresparser returned a city or garbage
+                city_names = {
+                    'kolkata', 'mumbai', 'delhi', 'bangalore', 'bengaluru', 'chennai',
+                    'hyderabad', 'pune', 'ahmedabad', 'jaipur', 'lucknow', 'kanpur',
+                    'nagpur', 'indore', 'thane', 'bhopal', 'patna', 'noida', 'gurgaon',
+                    'gurugram', 'chandigarh', 'ranchi', 'howrah', 'coimbatore', 'kochi',
+                    'guwahati', 'bhubaneswar', 'dehradun', 'navi mumbai', 'new delhi',
+                    'greater noida', 'india', 'west bengal', 'maharashtra', 'karnataka',
+                    'tamil nadu', 'uttar pradesh', 'bihar', 'rajasthan', 'madhya pradesh',
+                    'varanasi', 'agra', 'meerut', 'faridabad', 'nashik', 'vadodara',
+                    'srinagar', 'amritsar', 'jodhpur', 'raipur', 'madurai', 'mysore',
+                    'visakhapatnam', 'aurangabad', 'dhanbad', 'durgapur', 'asansol',
+                    'ludhiana', 'rajkot', 'bareilly', 'aligarh', 'gorakhpur', 'warangal',
+                    'salem', 'solapur', 'jalandhar', 'moradabad', 'tiruppur', 'kota',
+                    'tiruchirappalli', 'vijayawada'
+                }
+                parsed_name = resume_data.get('name', '') or ''
+                name_words = parsed_name.lower().split()
+                name_is_bad = (
+                    not parsed_name.strip() or
+                    any(w in city_names for w in name_words) or
+                    len(parsed_name.strip()) < 2
+                )
+                if name_is_bad and raw_text:
+                    fb = fallback_resume_parser(raw_text, pdf_file.name)
+                    if fb.get('name', '').strip():
+                        resume_data['name'] = fb['name']
+                
+                # Validate degree: if pyresparser missed it, try fallback
+                parsed_degree = resume_data.get('degree', None)
+                if (not parsed_degree or str(parsed_degree).strip().lower() in ['', 'none', 'not detected', '[]']) and raw_text:
+                    fb = fallback_resume_parser(raw_text, pdf_file.name)
+                    if fb.get('degree', '').strip():
+                        resume_data['degree'] = fb['degree']
+                
+                # If degree is a list (pyresparser returns list), convert to string
+                if isinstance(resume_data.get('degree'), list):
+                    if resume_data['degree']:
+                        resume_data['degree'] = ', '.join(str(d) for d in resume_data['degree'])
+                    else:
+                        if raw_text:
+                            fb = fallback_resume_parser(raw_text, pdf_file.name)
+                            resume_data['degree'] = fb.get('degree', 'Not detected')
+            
             # Show user-friendly message based on result
             if not resume_data:
                 st.error("Unable to parse your resume. Please ensure your PDF contains readable text and try again.")
@@ -1057,6 +1182,241 @@ def run():
                         text='Recommended skills generated from System',value=recommended_skills,key = 'general')
                     st.markdown('''<h5 style='text-align: left; color: #092851;'>Consider exploring specific career paths to stand out</h5>''',unsafe_allow_html=True)
                     rec_course = course_recommender(soft_skills_course) if soft_skills_course else "Explore courses in your area of interest"
+
+
+                # ─────────────────────────────────────────────────────────────
+                # ML vs KEYWORD COMPARISON SECTION
+                # ─────────────────────────────────────────────────────────────
+                st.markdown("---")
+                st.markdown("""
+                <div style='background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+                            border-radius: 16px; padding: 24px; margin: 8px 0;
+                            border: 1px solid rgba(100,180,255,0.2);'>
+                    <h2 style='color: #e0f2fe; font-size: 1.6rem; margin: 0 0 4px 0;'>
+                        &#x1F4CA; Keyword Analysis vs ML Analysis
+                    </h2>
+                    <p style='color: #94a3b8; margin: 0; font-size: 0.9rem;'>
+                        See how the traditional keyword approach compares to the trained Machine Learning model
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
+
+                if is_ml_ready() and resume_text:
+                    ml_role_result  = predict_job_role(resume_text)
+                    ml_score_result = predict_score(resume_text)
+                    ml_metrics      = get_model_metrics()
+
+                    col_kw, col_ml = st.columns(2, gap="medium")
+
+                    # ── Left column: Keyword-Based ──
+                    with col_kw:
+                        st.markdown("""
+                        <div style='background: linear-gradient(135deg, #1e3a5f, #1a2a4a);
+                                    border-radius: 14px; padding: 20px; height: 100%;
+                                    border: 1px solid rgba(96,165,250,0.3);'>
+                            <div style='display:flex; align-items:center; gap:10px; margin-bottom:14px;'>
+                                <span style='font-size:1.8rem;'>&#x1F511;</span>
+                                <div>
+                                    <h3 style='color:#93c5fd; margin:0; font-size:1.1rem;'>Keyword-Based Analysis</h3>
+                                    <p style='color:#64748b; margin:0; font-size:0.78rem;'>Pattern matching against curated keyword lists</p>
+                                </div>
+                            </div>
+                        """, unsafe_allow_html=True)
+
+                        kw_field = reco_field if reco_field else 'Not detected'
+                        kw_score_display = resume_score if 'resume_score' in dir() and resume_score else 'N/A'
+                        kw_matches = max_count if 'max_count' in dir() and max_count else 0
+                        kw_level = cand_level if 'cand_level' in dir() and cand_level else 'N/A'
+                        kw_skills_cnt = len(resume_data.get('skills', [])) if resume_data else 0
+
+                        st.markdown(f"""
+                        <div style='background:rgba(255,255,255,0.05); border-radius:10px; padding:14px; margin:6px 0;'>
+                            <p style='color:#94a3b8; margin:0 0 4px 0; font-size:0.75rem; text-transform:uppercase; letter-spacing:1px;'>Detected Field</p>
+                            <p style='color:#e2e8f0; margin:0; font-size:1.1rem; font-weight:600;'>{kw_field}</p>
+                        </div>
+                        <div style='background:rgba(255,255,255,0.05); border-radius:10px; padding:14px; margin:6px 0;'>
+                            <p style='color:#94a3b8; margin:0 0 4px 0; font-size:0.75rem; text-transform:uppercase; letter-spacing:1px;'>Keyword Matches</p>
+                            <p style='color:#60a5fa; margin:0; font-size:1.3rem; font-weight:700;'>{kw_matches} keywords matched</p>
+                        </div>
+                        <div style='background:rgba(255,255,255,0.05); border-radius:10px; padding:14px; margin:6px 0;'>
+                            <p style='color:#94a3b8; margin:0 0 4px 0; font-size:0.75rem; text-transform:uppercase; letter-spacing:1px;'>Resume Score</p>
+                            <p style='color:#e2e8f0; margin:0; font-size:1.3rem; font-weight:700;'>{kw_score_display}/100</p>
+                        </div>
+                        <div style='background:rgba(255,255,255,0.05); border-radius:10px; padding:14px; margin:6px 0;'>
+                            <p style='color:#94a3b8; margin:0 0 4px 0; font-size:0.75rem; text-transform:uppercase; letter-spacing:1px;'>Candidate Level</p>
+                            <p style='color:#93c5fd; margin:0; font-size:1rem; font-weight:600;'>{kw_level}</p>
+                        </div>
+                        <div style='background:rgba(255,255,255,0.05); border-radius:10px; padding:14px; margin:6px 0;'>
+                            <p style='color:#94a3b8; margin:0 0 4px 0; font-size:0.75rem; text-transform:uppercase; letter-spacing:1px;'>Skills Found</p>
+                            <p style='color:#e2e8f0; margin:0; font-size:1rem; font-weight:600;'>{kw_skills_cnt} skills detected</p>
+                        </div>
+                        </div>
+                        """, unsafe_allow_html=True)
+
+                    # ── Right column: ML-Based ──
+                    with col_ml:
+                        ml_category      = ml_role_result.get('category', 'Unknown')
+                        ml_confidence    = ml_role_result.get('confidence', 0)
+                        ml_top3          = ml_role_result.get('top3', [])
+                        ml_score         = ml_score_result.get('score', 0)
+                        ml_grade         = ml_score_result.get('grade', 'N/A')
+                        ml_grade_conf    = ml_score_result.get('grade_confidence', 0)
+                        ml_interp        = ml_score_result.get('interpretation', '')
+                        ml_grade_color   = ml_score_result.get('color', '#94a3b8')
+                        ml_acc           = ml_metrics.get('job_role_accuracy', 0)
+                        ml_score_acc     = ml_metrics.get('score_grade_accuracy', 0)
+                        ml_score_cv      = ml_metrics.get('score_grade_cv', 0)
+                        ml_within_10     = ml_metrics.get('score_within_10', 0)
+                        ml_within_15     = ml_metrics.get('score_within_15', 0)
+                        ml_algo          = ml_metrics.get('job_role_algorithm', 'Random Forest')
+                        ml_score_algo    = ml_metrics.get('score_algorithm', 'Ensemble + Feature Engineering')
+
+                        # Grade colour (from predictor or fallback)
+                        grade_color = ml_grade_color if ml_grade_color != '#94a3b8' else {'Poor':'#f87171','Average':'#fbbf24','Good':'#a3e635','Excellent':'#4ade80'}.get(ml_grade,'#94a3b8')
+
+                        st.markdown(f"""
+                        <div style='background: linear-gradient(135deg, #1a3a2a, #1a2a3a);
+                                    border-radius: 14px; padding: 20px; height: 100%;
+                                    border: 1px solid rgba(74,222,128,0.3);'>
+                            <div style='display:flex; align-items:center; gap:10px; margin-bottom:14px;'>
+                                <span style='font-size:1.8rem;'>&#x1F916;</span>
+                                <div>
+                                    <h3 style='color:#86efac; margin:0; font-size:1.1rem;'>ML-Based (Trained Model)</h3>
+                                    <p style='color:#64748b; margin:0; font-size:0.78rem;'>{ml_algo} | Trained on 10,000 resumes</p>
+                                </div>
+                            </div>
+                        """, unsafe_allow_html=True)
+
+                        st.markdown(f"""
+                        <div style='background:rgba(255,255,255,0.05); border-radius:10px; padding:14px; margin:6px 0;'>
+                            <p style='color:#94a3b8; margin:0 0 4px 0; font-size:0.75rem; text-transform:uppercase; letter-spacing:1px;'>Predicted Field</p>
+                            <p style='color:#e2e8f0; margin:0; font-size:1.1rem; font-weight:600;'>{ml_category}</p>
+                        </div>
+                        <div style='background:rgba(255,255,255,0.05); border-radius:10px; padding:14px; margin:6px 0;'>
+                            <p style='color:#94a3b8; margin:0 0 4px 0; font-size:0.75rem; text-transform:uppercase; letter-spacing:1px;'>Field Prediction Confidence</p>
+                            <div style='display:flex; align-items:center; gap:10px;'>
+                                <div style='flex:1; background:rgba(255,255,255,0.1); border-radius:6px; height:10px; overflow:hidden;'>
+                                    <div style='width:{ml_confidence}%; background:linear-gradient(90deg,#4ade80,#22c55e); height:100%; border-radius:6px;'></div>
+                                </div>
+                                <span style='color:#4ade80; font-weight:700; font-size:1rem; min-width:48px;'>{ml_confidence}%</span>
+                            </div>
+                        </div>
+                        <div style='background:rgba(255,255,255,0.05); border-radius:10px; padding:14px; margin:6px 0;'>
+                            <p style='color:#94a3b8; margin:0 0 6px 0; font-size:0.75rem; text-transform:uppercase; letter-spacing:1px;'>Resume Quality Grade</p>
+                            <div style='display:flex; align-items:center; gap:12px;'>
+                                <span style='font-size:2rem; font-weight:800; color:{grade_color}; background:rgba(0,0,0,0.2); border-radius:10px; padding:4px 14px;'>{ml_grade}</span>
+                                <div>
+                                    <p style='color:#e2e8f0; margin:0; font-size:1.1rem; font-weight:700;'>Score: {ml_score}/100</p>
+                                    <p style='color:#94a3b8; margin:0; font-size:0.8rem;'>{ml_interp}</p>
+                                </div>
+                            </div>
+                            <div style='margin-top:8px; display:flex; align-items:center; gap:8px;'>
+                                <p style='color:#94a3b8; margin:0; font-size:0.75rem;'>Grade confidence:</p>
+                                <div style='flex:1; background:rgba(255,255,255,0.1); border-radius:4px; height:6px; overflow:hidden;'>
+                                    <div style='width:{ml_grade_conf}%; background:{grade_color}; height:100%; border-radius:4px;'></div>
+                                </div>
+                                <span style='color:{grade_color}; font-weight:700; font-size:0.85rem;'>{ml_grade_conf}%</span>
+                            </div>
+                        </div>
+                        """, unsafe_allow_html=True)
+
+                        st.markdown(f"""
+                        <div style='background:rgba(255,255,255,0.05); border-radius:10px; padding:14px; margin:6px 0;'>
+                            <p style='color:#94a3b8; margin:0 0 4px 0; font-size:0.75rem; text-transform:uppercase; letter-spacing:1px;'>Model Accuracy</p>
+                            <p style='color:#86efac; margin:0; font-size:1.05rem; font-weight:700;'>Job Role: {ml_acc*100:.1f}% &nbsp;|&nbsp; Score: {ml_within_10*100:.1f}%</p>
+                        </div>
+                        </div>
+                        """, unsafe_allow_html=True)
+
+                    # ── Top 3 Predictions ──
+                    if ml_top3:
+                        st.markdown("<br>", unsafe_allow_html=True)
+                        st.markdown("#### 🎯 ML Top-3 Predicted Categories")
+                        for i, (cat, conf) in enumerate(ml_top3):
+                            medal = ['🥇','🥈','🥉'][i]
+                            bar_color = ['#4ade80','#a3e635','#fbbf24'][i]
+                            st.markdown(f"""
+                            <div style='display:flex; align-items:center; gap:12px; margin:6px 0;
+                                        background:rgba(255,255,255,0.04); border-radius:10px; padding:10px 14px;'>
+                                <span style='font-size:1.2rem;'>{medal}</span>
+                                <span style='color:#e2e8f0; font-weight:500; flex:1;'>{cat}</span>
+                                <div style='width:200px; background:rgba(255,255,255,0.1); border-radius:6px; height:8px; overflow:hidden;'>
+                                    <div style='width:{conf}%; background:{bar_color}; height:100%; border-radius:6px;'></div>
+                                </div>
+                                <span style='color:{bar_color}; font-weight:700; min-width:48px; text-align:right;'>{conf}%</span>
+                            </div>
+                            """, unsafe_allow_html=True)
+
+                    st.markdown("<br>", unsafe_allow_html=True)
+                    st.markdown("#### 📋 Actual Results Comparison — Your Resume")
+
+                    # Determine agreement
+                    kw_match = "✅ Agreement" if reco_field and ml_category and reco_field.lower() in ml_category.lower() else "⚠️ Different"
+
+                    # Keyword score grade for comparison
+                    kw_grade = 'Poor'
+                    if 'resume_score' in dir() and resume_score:
+                        if resume_score >= 80: kw_grade = 'Excellent'
+                        elif resume_score >= 60: kw_grade = 'Good'
+                        elif resume_score >= 40: kw_grade = 'Average'
+
+                    # Skills count
+                    kw_skills_count = len(resume_data.get('skills', [])) if resume_data else 0
+                    kw_level = cand_level if 'cand_level' in dir() and cand_level else 'N/A'
+
+                    comparison_data = {
+                        'Parameter': [
+                            'Recommended Field',
+                            'Confidence',
+                            'Resume Score',
+                            'Resume Grade',
+                            'Candidate Level',
+                            'Skills Detected',
+                            'Result Agreement'
+                        ],
+                        '🔑 Keyword Analysis': [
+                            reco_field if reco_field else 'Not detected',
+                            f'{max_count} keyword matches' if 'max_count' in dir() and max_count else 'Keyword count',
+                            f'{resume_score}/100' if 'resume_score' in dir() and resume_score else 'N/A',
+                            kw_grade,
+                            kw_level,
+                            f'{kw_skills_count} skills found',
+                            kw_match
+                        ],
+                        '🤖 ML Prediction': [
+                            ml_category,
+                            f'{ml_confidence}%',
+                            f'{ml_score}/100',
+                            ml_grade,
+                            'ML-derived',
+                            f'TF-IDF + {len(resume_data.get("skills", []))} features' if resume_data else 'N/A',
+                            kw_match
+                        ]
+                    }
+                    st.dataframe(
+                        pd.DataFrame(comparison_data),
+                        use_container_width=True,
+                        hide_index=True
+                    )
+
+                    # Show which method might be better for this resume
+                    if reco_field and ml_category and reco_field.lower() not in ml_category.lower():
+                        st.warning(f"**Different fields detected:** Keyword says **{reco_field}**, ML says **{ml_category}**. This can happen when the resume has cross-domain skills.")
+                    else:
+                        st.success(f"**Both methods agree:** Your resume best fits the **{ml_category}** field.")
+
+                else:
+                    if not is_ml_ready():
+                        st.warning("""
+                        **ML models are not trained yet.**
+                        Run this command once to train the models:
+                        ```bash
+                        python ml/train_models.py
+                        ```
+                        After training, restart the app to see the ML comparison.
+                        """)
+                    else:
+                        st.info("Upload a resume to see the ML vs Keyword comparison.")
 
 
                 ## Resume Scorer & Resume Writing Tips

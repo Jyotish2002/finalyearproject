@@ -1,0 +1,541 @@
+text,score
+"Full-stack developer with 8 years experience in React, Node.js, PostgreSQL, and REST APIs, delivered 15+ production applications",97
+"Senior Python developer with expertise in Django, Flask, FastAPI, and microservices, reduced API latency by 40% through caching",96
+"DevOps engineer skilled in Jenkins, GitLab CI/CD, Docker, Kubernetes, and Terraform, automated deployments reducing release time by 60%",95
+"AI Engineer with 6 years experience in deep learning, NLP, transformers, TensorFlow, PyTorch, deployed scalable ML pipelines on AWS with 30% efficiency improvement",97
+"Cloud Architect expert in AWS, Azure, Kubernetes, Terraform, designed distributed systems handling millions of users, reduced infrastructure cost by 40%",96
+"Senior Backend Engineer with 10 years experience in Java, Spring Boot, microservices, Kafka, Docker, improved system performance by 50%",95
+"Cybersecurity expert with CEH certification, penetration testing, network security, prevented major security breaches saving company $2M",94
+"Mobile developer with 7 years building iOS and Android apps using Swift, Kotlin, and Flutter, published 20+ apps with 4.8 star ratings",93
+"Data Engineer with expertise in Apache Spark, Hadoop, Airflow, and AWS Glue, built ETL pipelines processing 10TB daily",94
+"Software Architect with 12 years designing scalable enterprise systems, led teams of 20+ engineers across 3 continents",96
+"Frontend engineer proficient in Vue.js, TypeScript, Webpack, performance optimization; improved Core Web Vitals scores by 35%",88
+"Site Reliability Engineer with expertise in Prometheus, Grafana, PagerDuty, and chaos engineering; maintained 99.99% uptime",91
+"Blockchain developer with Solidity, Ethereum, Web3.js, and smart contract auditing experience; launched 3 successful DeFi protocols",89
+"Database administrator specializing in PostgreSQL, MySQL, Redis, and MongoDB; optimized queries reducing DB load by 55%",87
+"QA engineer with Selenium, Cypress, JIRA, and test automation expertise; reduced regression testing time by 70%",83
+"Network engineer with CCNA, CCNP certifications; designed WAN/LAN infrastructure for 5000+ user enterprise",85
+"Machine Learning engineer with scikit-learn, XGBoost, and MLflow expertise; built fraud detection model with 97% accuracy",92
+"Systems programmer skilled in C, C++, Linux kernel modules, and embedded systems with RTOS experience",88
+"Cloud Security engineer with AWS Security Specialty certification, implemented zero-trust architecture for Fortune 500 client",90
+"ERP consultant with SAP S/4HANA, ABAP, and Fiori implementation experience across manufacturing and logistics sectors",86
+"IT project manager with PMP certification, delivered 30+ software projects on time and under budget using Agile and Scrum",84
+"Computer vision engineer with OpenCV, YOLO, and MediaPipe expertise; built real-time object detection for autonomous vehicles",91
+"Data analyst with Power BI, Tableau, SQL, and Python; created dashboards used by C-suite for strategic decisions",82
+"API developer with GraphQL, REST, gRPC, and OpenAPI specification expertise; designed integrations for 50+ enterprise clients",87
+"Salesforce developer with Apex, Lightning Web Components, and Salesforce Admin certification; automated CRM workflows saving 200 hrs/month",85
+"Embedded systems engineer with ARM Cortex, FreeRTOS, and firmware development experience in IoT and automotive",86
+React Native developer with 5 years experience building cross-platform apps for fintech and e-commerce sectors,84
+"Big Data architect with Kafka, Flink, Cassandra, and Elasticsearch expertise; designed real-time analytics platform for telco",90
+Linux system administrator with Red Hat certifications; managed 500+ server infrastructure with 99.9% uptime,83
+"Game developer with Unity, C#, and Unreal Engine 5 experience; shipped 4 commercial titles with 1M+ downloads",85
+"IT support specialist with CompTIA A+, Network+; resolved 95% of tickets within SLA across 1000-user environment",68
+"Junior web developer with HTML, CSS, JavaScript, and basic React knowledge; completed 3 freelance projects",63
+"Software tester with manual testing skills, JIRA experience, and basic automation knowledge using Selenium",64
+"IT helpdesk technician with Windows, Active Directory, and Office 365 administration experience",66
+"Junior data analyst with Excel, basic SQL, and Power BI knowledge; completed data analytics certification online",62
+"Python beginner with knowledge of basic scripts, data structures, and OOP; completed Coursera Python course",60
+"WordPress developer with theme customization, plugin setup, and basic PHP knowledge for small business websites",65
+"Network support technician with basic routing, switching, and Cisco configuration experience",63
+"IT intern with exposure to cloud platforms, basic Linux commands, and version control using Git",61
+Android developer fresher with Java and basic Android Studio knowledge; built 2 personal projects as part of college curriculum,62
+"Junior SQL developer with MySQL experience, basic stored procedures, and data normalization knowledge",64
+"IT coordinator handling software installations, user account management, and basic troubleshooting",67
+Junior DevOps with basic knowledge of Docker containers and Git pipelines; learning AWS fundamentals,61
+"Computer science graduate with knowledge of algorithms, data structures, and basic web development using PHP",63
+"Technical support engineer handling L1/L2 issues, remote desktop support, and hardware troubleshooting",66
+Junior cybersecurity analyst with CompTIA Security+ studying; familiar with firewall rules and basic SIEM tools,65
+Mobile app tester with experience in manual testing of iOS and Android apps using TestFlight and real devices,62
+"UI developer with HTML5, CSS3, Bootstrap, and basic JavaScript skills for responsive web design",64
+"IT fresher with knowledge of networking fundamentals, Python basics, and office productivity tools",60
+"Software developer with 3 years experience in Java, Spring MVC, and Oracle DB for banking applications",74
+"Physics teacher with 10 years experience, improved student results by 25%, expertise in curriculum planning and mentoring",88
+"English teacher skilled in grammar, communication, and literature, trained 500+ students successfully",84
+School principal with leadership experience managing 50+ staff and improving institutional performance by 30%,90
+"Mathematics professor with PhD, published 20+ research papers, taught undergraduate and postgraduate courses for 15 years",92
+"Special education teacher with expertise in IEP development, behavior management, and assistive technology for disabled students",89
+"Chemistry teacher with 12 years experience, developed innovative lab programs that increased student engagement by 40%",87
+"Primary school teacher with child development expertise, designed creative lesson plans improving literacy rates by 35%",85
+"Educational psychologist with counseling skills, helped 300+ students overcome learning disabilities and anxiety",88
+"University lecturer in Computer Science with 8 years experience teaching algorithms, data structures, and AI courses",86
+"Curriculum developer with expertise in CBSE, IGCSE, and IB frameworks; created blended learning materials for 10+ schools",87
+School counselor providing career guidance and mental health support to 500+ students annually,84
+"Biology teacher with 9 years experience, led students to win national science olympiad 3 consecutive years",86
+History teacher with expertise in Socratic teaching methods and project-based learning for senior secondary students,83
+"Early childhood educator with Montessori certification, designed play-based learning environments for 2-6 year olds",85
+Physical education teacher with sports coaching certifications; trained school teams to win state-level competitions,82
+"Online tutor with 6 years experience teaching IELTS, TOEFL, and academic English to international students",80
+"School librarian with expertise in information literacy, digital resources, and reading promotion programs",78
+Hindi language teacher with 7 years experience in CBSE schools; developed oral communication workshops,79
+"Geography teacher with field study expertise, organized educational trips, improved student pass rates by 20%",81
+"Distance learning coordinator managing LMS platforms, student engagement, and online course development",80
+Teacher with basic teaching skills and classroom handling experience,64
+Substitute teacher with experience covering multiple subjects for short-term assignments,58
+Tutor offering home tuitions in math and science for grades 6-10,55
+Teaching assistant supporting senior teachers in classroom activities and basic student monitoring,60
+Fresher teacher with B.Ed degree looking for first opportunity in a reputed school,50
+Online educator with basic knowledge of Zoom and Google Classroom for conducting virtual sessions,52
+School volunteer with experience helping students with homework and reading activities,45
+Coaching center faculty teaching basic concepts in mathematics for competitive exam aspirants,62
+Language trainer with basic English communication skills teaching spoken English at local institute,57
+Part-time teacher handling extracurricular activities and basic subject coverage at primary level,53
+Education coordinator with admin experience managing student records and scheduling at a small school,61
+Nursery teacher with basic child care skills and classroom supervision experience,56
+"Social science teacher with 3 years experience in CBSE school covering history, geography, and civics",72
+"Commerce teacher handling accounts, economics, and business studies for classes 11 and 12",70
+Music teacher with classical vocal training and experience teaching students aged 8-18,74
+Art teacher with BFA degree; conducted drawing and painting workshops for school students,72
+Academic coordinator overseeing curriculum delivery and teacher performance at secondary school level,73
+"Science teacher with 4 years experience in private school, conducting practical sessions and assessments",71
+Sports coach with experience training school teams in cricket and football at inter-school level,69
+"Dance teacher with Bharatnatyam training, teaching classical and folk dance to students of all ages",68
+Surgeon with 12 years experience performing complex surgeries with high success rate,95
+"Pharmacist with expertise in drug dispensing, patient counseling, and inventory management",82
+Physiotherapist helping patients recover from injuries using advanced therapy techniques,80
+"Cardiologist with 15 years experience, performed 2000+ cardiac procedures, published 30 peer-reviewed papers",96
+Pediatrician with 10 years experience in neonatal care and childhood immunization programs,91
+"Oncologist specializing in chemotherapy protocols, participated in 5 international clinical trials",93
+"Radiologist with expertise in CT, MRI, and PET scan interpretation; diagnosed 10,000+ cases accurately",90
+"ICU nurse with 8 years experience managing critical patients, ventilators, and emergency protocols",87
+"Dentist with BDS and MDS, specialized in orthodontics and cosmetic dentistry; treated 5000+ patients",88
+"Dermatologist with expertise in skin disorders, laser treatments, and cosmetic procedures",87
+"Psychiatrist with 12 years experience treating mood disorders, schizophrenia, and addiction",91
+"Dietitian and nutritionist with clinical experience managing diabetes, obesity, and eating disorders",84
+"Emergency medicine specialist with ATLS certification, managed 200+ trauma cases monthly",92
+"Anesthesiologist with expertise in general, regional, and cardiac anesthesia; zero adverse event record",93
+Neurosurgeon performing complex spinal and brain surgeries with 94% success rate over 10 years,96
+"Hospital administrator managing 300-bed hospital operations, budgets, and quality accreditation",89
+Ophthalmologist specializing in cataract surgery and LASIK; performed 3000+ procedures,90
+"Pathologist with expertise in histopathology, cytology, and molecular diagnostics",88
+Medical researcher with PhD in Immunology; led studies resulting in 2 patent applications,91
+Nurse practitioner with prescriptive authority managing primary care for 150+ patients weekly,85
+"Lab technician with DMLT qualification handling blood tests, urine analysis, and microbiological cultures",70
+"Nursing assistant supporting ward nurses with patient hygiene, vitals monitoring, and basic care",62
+Medical transcriptionist with 3 years experience transcribing clinical notes and discharge summaries,65
+"Hospital receptionist managing patient registrations, appointments, and insurance documentation",60
+Pharmacy assistant with knowledge of drug inventory management and basic dispensing support,63
+Health worker conducting community health awareness programs and basic first aid training,67
+Optometrist with 4 years experience conducting eye exams and prescribing corrective lenses,74
+Occupational therapist helping patients regain daily living skills after neurological conditions,79
+Speech therapist with experience treating language disorders in children and stroke patients,80
+Audiologist providing hearing assessments and fitting hearing aids for patients of all ages,78
+Ward nurse with 5 years experience managing post-operative patients and medication schedules,76
+Radiography technician with experience in X-ray and basic CT scan imaging support,72
+Ambulance paramedic trained in ACLS providing pre-hospital emergency care,82
+Dental hygienist with 4 years clinical experience performing cleanings and patient education,74
+Biomedical engineer maintaining hospital equipment including ventilators and dialysis machines,78
+"Medical billing executive with expertise in insurance claims, ICD-10 coding, and revenue cycle management",72
+Home health aide providing daily assistance to elderly patients with mobility and medication compliance,64
+Midwife with experience conducting 500+ deliveries and providing antenatal and postnatal care,83
+"Clinical psychologist providing CBT and counseling for anxiety, depression, and PTSD",85
+Hospital infection control officer implementing hygiene protocols and reducing HAI rates by 25%,84
+Nurse with basic patient care skills and ward management experience,66
+Fresher MBBS graduate seeking internship in a reputed hospital for clinical training,55
+"Medical student with basic knowledge of anatomy, physiology, and clinical rotations",52
+Pharmacy fresher with D.Pharm qualification looking for entry-level dispensing role,56
+Healthcare volunteer assisting NGO medical camps with basic patient support activities,48
+Criminal lawyer with strong courtroom experience and case handling expertise,86
+Legal advisor specializing in corporate compliance and contract management,87
+Senior advocate with 20 years of litigation experience in High Court and Supreme Court,94
+"Intellectual property lawyer with expertise in patent filing, trademark registration, and IP litigation",90
+"Corporate lawyer specializing in M&A, joint ventures, due diligence, and SEBI compliance",91
+"Family law attorney handling divorce, custody, alimony, and domestic violence cases for 10+ years",85
+"Tax lawyer with expertise in GST disputes, income tax appeals, and international tax planning",89
+"Labour and employment lawyer advising companies on HR compliance, terminations, and industrial disputes",87
+"Real estate lawyer handling property transactions, title verification, and RERA compliance",86
+Legal researcher with LLM degree and expertise in constitutional law and human rights,83
+Public prosecutor with 8 years experience representing the state in criminal proceedings,88
+"Contract specialist drafting, reviewing, and negotiating vendor and client agreements",82
+Legal compliance officer implementing regulatory frameworks for banking and NBFC clients,85
+Arbitration specialist with international arbitration experience under ICC and SIAC rules,88
+Company secretary with ICSI qualification managing board secretarial functions and ROC filings,84
+"Paralegal with 5 years experience in legal research, drafting pleadings, and case management",72
+Advocate with 3 years experience in district court handling civil and criminal matters,70
+Legal assistant supporting senior lawyers with documentation and court filing,63
+Law fresher with LLB degree seeking internship in corporate or litigation practice,52
+"Legal clerk managing court documents, case files, and basic correspondence for a law firm",58
+Junior lawyer with 2 years experience handling consumer court and labour tribunal matters,68
+Law intern with moot court experience and basic research skills using Manupatra and SCC Online,60
+"Notary public with authority to certify documents, affidavits, and legal attestations",65
+Legal transcriptionist with experience preparing court proceedings and deposition transcripts,60
+"Law graduate with knowledge of CPC, CrPC, and IPC; completed one-year internship at district court",62
+Mediator certified in dispute resolution with experience settling commercial and family disputes,78
+"Banking lawyer handling loan documentation, security creation, and NPA recovery matters",82
+"Environmental lawyer with expertise in pollution regulations, green tribunal proceedings, and ESG compliance",83
+"Cybercrime lawyer handling digital fraud, data breach, and IT Act cases",80
+"Immigration lawyer assisting clients with visa applications, work permits, and citizenship issues",79
+"Chartered Accountant with expertise in auditing, taxation, and financial reporting",91
+Investment banker managing portfolios and financial analysis for high net-worth clients,89
+"Accountant with Tally, GST, and bookkeeping experience",75
+"CFO with 18 years experience managing P&L, financial strategy, and investor relations for listed companies",96
+"Financial analyst with CFA Level 3 certification, equity research expertise, and DCF modeling skills",93
+"Risk manager with FRM certification, managed credit, market, and operational risks for NBFC",91
+"Tax consultant with expertise in corporate taxation, transfer pricing, and international tax treaties",90
+"Wealth manager advising HNI clients on portfolio construction, estate planning, and alternate investments",89
+Actuarial analyst with IFRS 17 expertise; priced life insurance products for top 3 insurer,90
+"Forensic accountant with experience in fraud investigation, litigation support, and asset tracing",88
+"Treasury manager handling forex hedging, liquidity management, and bank relationship for MNC",87
+SEBI-registered investment advisor with 10 years experience managing mutual fund and equity portfolios,88
+"Credit analyst evaluating loan proposals, financial statements, and collateral for commercial banks",83
+"Management accountant with SAP FICO expertise, handled budgeting, variance analysis, and MIS reporting",85
+Insurance underwriter with expertise in commercial risk assessment and policy pricing,82
+"Financial controller managing month-end close, consolidation, and statutory reporting for 5 entities",87
+"Private equity analyst with LBO modeling, fund accounting, and portfolio monitoring experience",86
+Cost accountant with CMA qualification; implemented activity-based costing saving 15% manufacturing costs,84
+Microfinance officer disbursing and monitoring loans for rural borrowers across 200 villages,72
+"Stock broker with NISM certifications, managed equity trading for 300+ retail clients",78
+"Accounts executive with Tally Prime, GST filing, and bank reconciliation experience",70
+Finance fresher with MBA in Finance and internship in mutual fund KYC operations,58
+"Junior accountant handling petty cash, vendor payments, and basic ledger entries",62
+Tax assistant filing individual and corporate income tax returns using ClearTax software,65
+"Payroll executive managing employee salaries, PF, ESIC, and TDS deductions for 500 employees",72
+Loan processing officer verifying documents and disbursing retail loans at NBFC,67
+"Bank cashier handling cash transactions, cheque processing, and customer service at branch",63
+"Audit assistant supporting chartered accountants with vouching, verification, and working papers",66
+Insurance agent selling life and health policies with knowledge of ULIP and term plans,60
+Financial data entry operator updating transaction records and account statements accurately,58
+"Accounts payable executive processing vendor invoices, reconciling statements, and managing disputes",71
+Financial planning analyst preparing 3-year budgets and monthly forecasts for manufacturing firm,80
+"Compliance officer ensuring FEMA, RBI, and SEBI regulatory adherence for brokerage firm",83
+"Portfolio manager handling AUM of Rs. 500 crore across equity, debt, and hybrid funds",88
+"Mergers and acquisitions analyst with experience in deal structuring, valuation, and integration",86
+"Cash flow analyst managing working capital, receivables, and payables for group of companies",80
+"GST consultant handling registration, return filing, reconciliation, and departmental audits",78
+"Internal auditor conducting risk-based audits, SOX compliance checks, and fraud investigations",82
+Financial literacy trainer conducting workshops for rural communities on savings and investment,70
+"Derivatives trader with expertise in options strategies, futures hedging, and risk management",85
+Budget analyst preparing departmental budgets and conducting variance analysis for government agency,75
+Business finance executive supporting operations with cost analysis and profitability reporting,73
+Junior financial analyst with CFA Level 1 cleared and Excel modeling skills,65
+"Bookkeeper maintaining daily accounts, bank statements, and financial records for small business",60
+Collection executive recovering overdue payments from retail loan defaulters,58
+"Electrical engineer with experience in circuit design, PLC, and industrial automation",83
+"Civil engineer managing construction projects, site supervision, and cost estimation",78
+"Mechanical engineer with 10 years in product design, CAD modeling, GD&T, and manufacturing processes",88
+"Structural engineer with expertise in RCC design, steel structures, and seismic analysis using STAAD Pro",86
+Chemical engineer with process engineering experience in petrochemical plants and HAZOP analysis,85
+"Aerospace engineer with FEA, CFD, and composite material design experience for defense projects",87
+"Automotive engineer specializing in powertrain calibration, ADAS systems, and ASPICE compliance",86
+"Environmental engineer designing water treatment plants, ETP systems, and conducting EIA studies",82
+"Instrumentation engineer with expertise in DCS, SCADA, and PID control systems for oil & gas",84
+"Production engineer optimizing manufacturing efficiency, implementing lean and Six Sigma methodologies",83
+"Quality assurance engineer with IATF 16949, ISO 9001 expertise and SPC, PPAP experience",82
+"Petroleum engineer with reservoir simulation, well logging, and production optimization experience",85
+"Geotechnical engineer conducting soil investigation, pile design, and ground improvement for metro projects",81
+"Marine engineer with Chief Engineer COC, managing vessel propulsion and machinery maintenance",84
+"Mining engineer with open-cast and underground mining experience, blast design, and safety compliance",80
+"Electrical site engineer supervising HT/LT electrical works, transformer installation, and commissioning",76
+"Piping engineer with expertise in isometric drawings, stress analysis, and P&ID for refinery projects",81
+"Robotics engineer designing industrial robots, vision systems, and end-effectors for automotive clients",85
+"MEP engineer designing HVAC, plumbing, and firefighting systems for commercial buildings",80
+"Project engineer coordinating multidisciplinary teams, procurement, and progress reporting for EPC projects",79
+Junior mechanical engineer with AutoCAD and SolidWorks knowledge; completed internship at manufacturing unit,64
+Civil site supervisor monitoring day-to-day construction activities and labour management,68
+"Electrical technician with knowledge of panel wiring, motor connections, and basic PLC programming",65
+Fresher engineer with B.Tech in Mechanical; basic knowledge of manufacturing processes and materials,56
+Engineering intern with exposure to CAD software and manufacturing floor operations,55
+Quality inspector performing incoming material inspection and basic dimensional checks,66
+Maintenance technician handling preventive maintenance of machines and utilities at factory,67
+Field engineer providing technical support and commissioning assistance for industrial equipment,72
+Safety officer with NEBOSH certification conducting hazard identification and safety audits at construction site,74
+Design engineer with 3 years experience creating 2D drawings and BOM using CATIA and ANSYS,73
+"Plant engineer managing utilities, energy efficiency, and breakdown maintenance at chemical plant",76
+Structural draughtsman preparing RCC and steel structure drawings using AutoCAD,70
+"Quantity surveyor preparing BOQ, rate analysis, and project cost estimates for building projects",72
+"HVAC engineer designing air conditioning systems for hospitals, malls, and data centres",78
+EPC project manager with 12 years experience delivering oil & gas projects worth $500M on schedule,90
+"Renewable energy engineer with solar PV system design, inverter sizing, and grid connection experience",80
+"Water resources engineer with irrigation canal design, hydrology, and dam safety assessment experience",79
+"Electrical design engineer with expertise in power distribution, load flow analysis, and protection coordination",82
+"Commissioning engineer for large HVAC chillers, AHU, and BMS integration in high-rise buildings",78
+Welding engineer with AWS CWI certification and expertise in structural and pressure vessel welding,80
+"HR manager with recruitment, employee engagement, and payroll management experience",82
+"Business analyst skilled in data analysis, stakeholder communication, and requirement gathering",85
+Operations manager improving workflow efficiency and reducing operational costs,87
+"CEO with 20 years experience scaling startups to $100M revenue, board management, and international expansion",96
+"Strategy consultant with McKinsey background, expertise in market entry, restructuring, and cost transformation",94
+"Supply chain director managing end-to-end procurement, logistics, and inventory for global FMCG brand",92
+"General manager overseeing P&L, team of 200, and multi-location operations for retail chain",91
+"Product manager with expertise in roadmap planning, user research, and agile delivery for SaaS products",88
+Change management consultant helping organizations through digital transformation and cultural shifts,87
+"Procurement manager with expertise in strategic sourcing, vendor development, and cost reduction",86
+Business development manager building enterprise client pipeline in APAC generating $10M revenue annually,87
+Logistics and distribution manager optimizing last-mile delivery for e-commerce platform handling 100K daily orders,88
+Corporate trainer developing leadership and sales training programs delivered to 5000+ employees,84
+"Quality management professional with ISO 9001, 14001, and 45001 expertise for multi-site certification",83
+"Brand manager developing brand strategies, ATL/BTL campaigns, and driving 25% market share growth",85
+"Retail operations manager overseeing 50 stores, visual merchandising, and staff performance",83
+"Management consultant with expertise in process reengineering, ERP implementation, and KPI frameworks",86
+Entrepreneur founded and scaled D2C brand to Rs. 50 crore revenue within 3 years,88
+Customer success manager reducing churn by 40% and growing NPS from 35 to 70 for SaaS company,83
+Franchise development manager expanding QSR chain from 20 to 150 outlets across India,84
+"HR executive with experience in talent acquisition, HRIS management, and employee lifecycle processes",72
+"Administrative manager handling office operations, vendor contracts, and facility management",70
+"Project coordinator supporting project managers with scheduling, documentation, and stakeholder updates",68
+Business development executive identifying new clients and supporting proposal writing for IT services firm,70
+"Operations executive managing daily logistics coordination, tracking shipments, and resolving delivery issues",67
+"Customer relationship manager handling key accounts, renewal conversations, and upselling efforts",72
+Junior business analyst with requirement documentation and basic process mapping skills,65
+"Office manager handling team calendars, travel booking, and vendor invoice processing",63
+"Sales coordinator preparing quotations, processing orders, and maintaining CRM database entries",64
+"Procurement executive sourcing materials, obtaining quotations, and maintaining supplier database",67
+"Training coordinator scheduling sessions, managing LMS, and tracking employee completion rates",65
+Fresher MBA with internship in operations and basic knowledge of supply chain processes,57
+Business management graduate seeking first role in operations or HR with good communication skills,53
+"Admin assistant handling data entry, filing, correspondence, and basic office support tasks",56
+Logistics fresher with knowledge of warehouse operations and basic inventory management,52
+Management trainee with 6-month internship and exposure to cross-functional business processes,58
+HR intern with basic recruitment support experience and knowledge of HR policies,55
+"Customer support agent with experience resolving queries, escalations, and maintaining CSAT scores",65
+"Team leader managing 10-member call centre team, coaching agents, and achieving daily targets",70
+"E-commerce executive managing product listings, catalogue updates, and marketplace operations on Amazon",69
+"Graphic designer skilled in Photoshop, Illustrator, branding, and UI/UX design",78
+Content writer with SEO expertise and blog writing experience generating high traffic,80
+Video editor experienced in Premiere Pro and After Effects,76
+Creative director with 15 years experience leading brand campaigns for top FMCG and tech companies,92
+"UI/UX designer with Figma, design systems, user research, and prototyping expertise for fintech apps",88
+"Motion graphics artist with Cinema 4D, After Effects, and 3D animation experience for broadcast media",85
+"Copywriter with expertise in brand storytelling, product launches, and performance advertising copy",84
+"Photographer and photo editor specializing in commercial, fashion, and food photography for brands",82
+Animation director with expertise in 2D frame-by-frame and cut-out animation for streaming platforms,86
+"3D modeler and visualizer with 3ds Max, V-Ray, and Unreal Engine experience for real estate and gaming",83
+Social media strategist growing brand accounts to 500K followers through content and influencer campaigns,82
+Art director leading visual identity projects for Fortune 500 brands across print and digital media,85
+"Podcast producer with audio editing, sound design, and distribution experience; launched 3 top-20 podcasts",80
+"Illustrator creating editorial, children's book, and product packaging illustrations for global clients",81
+"Brand consultant developing visual identity systems, brand guidelines, and positioning strategy",83
+"Junior graphic designer with Canva, Photoshop basics, and social media post creation experience",65
+Content creator producing short-form reels and YouTube videos for lifestyle and travel niche,67
+Freelance writer with 2 years experience producing blog posts and website content for small businesses,64
+Video editor with basic Premiere Pro skills editing vlogs and corporate videos for YouTube channel,63
+"Social media handler posting content, replying to comments, and scheduling using Buffer for brands",62
+Fresher graphic designer with portfolio of college projects; proficient in Canva and basic Illustrator,56
+Amateur photographer with DSLR knowledge seeking opportunities in event photography,52
+Content writer fresher with blog writing samples and basic SEO knowledge from online course,53
+"Creative intern with exposure to design briefs, mood boarding, and design tool basics",50
+Junior video editor cutting raw footage and adding basic transitions and text for social media clips,60
+Illustrator with hand-drawn and digital art skills; sells artwork on Etsy and Instagram,68
+Presentation designer creating PowerPoint and Google Slides decks for corporate training programs,70
+"Typographer with expertise in font selection, hierarchy, and layout for editorial publications",72
+"UX researcher conducting usability tests, surveys, and affinity mapping for product teams",78
+E-learning content developer building interactive modules using Articulate Storyline and Rise,76
+"Scriptwriter with experience writing brand explainer videos, ad films, and training content",74
+"Packaging designer with expertise in dieline creation, print production, and retail shelf impact",75
+Digital illustrator creating character designs and storyboards for gaming and animation studios,77
+Music composer and sound designer with experience creating original scores for ad films,73
+Calligrapher and lettering artist with experience in wedding stationery and brand identity projects,69
+Sales executive achieving monthly targets and building strong client relationships,74
+Marketing manager running successful campaigns and increasing brand awareness,85
+VP of Sales with 15 years experience scaling B2B SaaS revenue from $2M to $50M ARR,94
+"Digital marketing specialist with Google Ads, Meta Ads, and HubSpot expertise; ROI of 5x on ad spend",87
+Channel sales manager building distributor and reseller networks across 15 states,84
+"Growth hacker with expertise in user acquisition, A/B testing, and conversion rate optimization",85
+Key account manager managing enterprise clients worth Rs. 50 crore annually with 95% retention rate,86
+"Performance marketing lead running Rs. 5 crore monthly ad budgets across Google, Meta, and programmatic",88
+"CRM expert with Salesforce, HubSpot, and Zoho experience; built automated lead nurturing workflows",83
+"Trade marketing manager executing in-store activations, BTL campaigns, and loyalty programs for FMCG",82
+E-commerce marketing manager growing D2C brand sales from Rs. 10 lakh to Rs. 2 crore monthly,85
+Market research analyst conducting primary and secondary research to support brand strategy decisions,78
+"Product marketing manager launching 5 SaaS products with positioning, pricing, and GTM strategy",84
+Influencer marketing manager managing 200+ creator partnerships and tracking campaign ROI,80
+"SEO specialist with technical SEO, backlink building, and content strategy expertise; ranked 50+ keywords on Page 1",82
+Inside sales representative consistently achieving 120% quota through cold calling and email outreach,72
+"Field sales executive visiting retail outlets, managing shelf visibility, and reporting to area manager",68
+"Marketing executive executing social media posts, email newsletters, and basic campaign tracking",65
+"Sales coordinator preparing proposals, following up with prospects, and maintaining CRM entries",63
+Tele-caller making outbound calls to generate leads for insurance and loan products,58
+Promoter demonstrating products at retail stores and malls to drive on-spot purchases,55
+Digital marketing intern with basic knowledge of social media platforms and content scheduling tools,52
+Sales fresher with good communication skills and MBA internship in pharmaceutical sales,55
+"Marketing assistant supporting events, branding materials, and market data collection",58
+Email marketing executive with Mailchimp experience creating and sending newsletters,62
+Affiliate marketing executive managing partner onboarding and tracking commission payouts,65
+"Brand ambassador representing company at trade shows, events, and retail activations",60
+"Lead generation executive using LinkedIn, cold emails, and directories to generate B2B prospects",67
+"Retail sales associate handling customer walk-ins, product demos, and counter sales",60
+Sales trainer coaching front-line sales teams on objection handling and product knowledge,72
+"Category manager analyzing sales data, managing assortment, and coordinating with suppliers",76
+"Account executive handling renewals, upsells, and cross-sells for SaaS subscription clients",74
+B2B sales manager with 5 years experience in industrial equipment sales across Maharashtra,79
+Pricing analyst evaluating competitor pricing and recommending pricing strategy to maximize margins,75
+Demand planning executive forecasting sales and aligning inventory with marketing promotions,70
+Driver with 10 years experience and safe driving record,65
+Chef specializing in multi-cuisine cooking and kitchen management,77
+Hotel manager with hospitality and customer service expertise,79
+"Executive chef with Le Cordon Bleu training, managed 5-star kitchen team of 40, created award-winning menus",91
+"Airline pilot with ATPL, 8000 flight hours, type-rated on Boeing 737 and Airbus A320",94
+Merchant navy captain with Master Mariner certificate and 20 years ocean navigation experience,93
+"Farmer with expertise in organic cultivation, crop rotation, and precision farming technologies",78
+"Fitness trainer with ACE certification, sports nutrition knowledge, and 500+ client transformation records",80
+Journalist with 10 years experience covering politics and economics for national print and digital media,85
+"Fashion designer with NID degree, launched 3 collections at Lakme Fashion Week",83
+"Event planner with experience organizing 200+ corporate events, weddings, and product launches",81
+Interior designer with 8 years experience designing residential and commercial spaces worth Rs. 10 crore,82
+Chartered Surveyor with RICS accreditation managing property valuation and real estate advisory,84
+"Aviation ground staff with airside operations, passenger handling, and safety compliance experience",73
+"Tour guide with expertise in heritage tourism, multilingual communication, and itinerary planning",72
+Cook with 5 years experience in restaurant kitchen handling North Indian and Chinese cuisine,68
+Security guard with 8 years experience and knowledge of access control and CCTV monitoring,62
+"Housekeeping supervisor managing cleanliness, linen inventory, and staff scheduling at 4-star hotel",68
+"Warehouse worker with experience in loading, unloading, stock counting, and basic forklift operation",60
+Delivery executive with bike and smartphone handling e-commerce last-mile deliveries,58
+"Tailor with 10 years experience in stitching, alterations, and custom garment making",70
+Electrician with ITI certification and experience in domestic and commercial electrical wiring,68
+"Plumber with experience installing and repairing water supply, drainage, and sanitary fittings",63
+"Barber with 7 years experience in haircuts, styling, and grooming services",62
+"Carpenter with expertise in furniture making, wood joinery, and site installation",65
+"Mechanic with ITI in automobile; experience in engine servicing, brakes, and transmission repair",67
+"Welder with experience in MIG, TIG, and arc welding for structural and pipeline work",66
+"Mason with 12 years experience in brickwork, plastering, and flooring for residential construction",64
+"Painter with experience in interior and exterior painting, texture finishes, and wallpaper installation",60
+"Security supervisor managing 20-member guard team, shift scheduling, and incident reporting",65
+"Junior software developer with knowledge of Python, Java, and basic web development",62
+Teacher with basic teaching skills and classroom handling experience,64
+Nurse assisting doctors and managing patient care,66
+Bank clerk handling transactions and customer queries,63
+Mechanical technician with basic machine handling skills,61
+Customer service representative handling inbound queries and complaint resolution for telecom company,70
+Data entry operator with high accuracy in updating records in ERP and spreadsheet systems,62
+"Office assistant handling correspondence, scheduling, and basic admin tasks for a mid-size firm",61
+"Purchase assistant comparing vendor quotes, raising POs, and maintaining purchase records",65
+"HR coordinator managing onboarding documentation, attendance tracking, and leave management",67
+"Store keeper maintaining inventory records, conducting stock counts, and managing dispatch",64
+"Billing executive raising invoices, reconciling payments, and managing accounts receivable",68
+"Receptionist managing front desk, visitor management, and incoming calls professionally",62
+"Logistics coordinator tracking shipments, coordinating with transporters, and resolving delivery delays",69
+"Sales support executive preparing MIS reports, managing order tracker, and supporting field sales team",66
+Content moderator reviewing user-generated content for policy violations on digital platforms,63
+Accounts assistant with basic bookkeeping and knowledge of GST return preparation,65
+"Production operator running CNC machines, following work instructions, and maintaining quality",64
+"Computer operator handling data processing, report generation, and basic system maintenance",62
+"Lab assistant supporting scientists with sample preparation, equipment calibration, and record keeping",65
+"Field technician installing and maintaining telecom towers, internet connections, and cable networks",67
+"E-commerce executive managing product listings, pricing updates, and order fulfilment on marketplace",68
+"Social media executive posting content, responding to comments, and tracking basic engagement metrics",65
+"Junior accountant posting journal entries, preparing bank reconciliation, and assisting with GST returns",64
+"Marketing coordinator executing ATL/BTL campaigns, preparing campaign reports, and vendor coordination",67
+"Supply chain executive coordinating with warehouses, transporters, and vendors for order fulfillment",70
+"Quality control analyst performing incoming inspections, maintaining quality records, and reporting NCRs",68
+IT helpdesk technician resolving hardware and software issues for 200+ users across 3 offices,67
+"Retail store manager handling daily sales operations, staff scheduling, and inventory replenishment",72
+"Insurance claims processor verifying documents, calculating settlement amounts, and coordinating with surveyors",65
+Driver with commercial license handling executive transport and airport pickups professionally,62
+"Hotel front desk associate managing check-ins, check-outs, and guest request handling",63
+"Dental assistant supporting dentist with patient preparation, instrument sterilization, and X-rays",64
+"Junior civil engineer assisting in site supervision, quantity surveying, and drawing coordination",68
+CAD operator preparing 2D drawings and basic 3D models from engineer sketches using AutoCAD,65
+"Safety officer conducting toolbox talks, incident reporting, and PPE compliance checks at site",70
+"Accounts payable assistant processing invoices, matching POs, and preparing payment vouchers",63
+"Warehouse supervisor overseeing storage, picking, packing, and dispatch activities for daily orders",70
+"Back-office executive handling document verification, data processing, and basic customer communication",61
+Call centre agent managing inbound customer service calls for e-commerce and resolving order issues,62
+"Junior HR executive supporting talent acquisition, screening resumes, and scheduling interviews",65
+"Admin coordinator arranging office supplies, coordinating meetings, and handling travel bookings",63
+"Medical representative visiting doctors, promoting pharmaceutical products, and achieving prescription targets",70
+Food safety auditor conducting hygiene inspections and regulatory compliance checks at food facilities,71
+"Real estate agent assisting clients with property search, site visits, and documentation for transactions",69
+Tax assistant preparing individual income tax returns and basic GST returns for small businesses,64
+"Construction site engineer monitoring daily work progress, quality checks, and subcontractor coordination",72
+"Automobile sales consultant handling showroom inquiries, test drives, and closing vehicle deals",67
+Content executive writing product descriptions and basic articles for company website,63
+"Recruitment executive sourcing candidates through job portals, conducting initial screening calls",66
+I know some computer skills and want to work in IT,50
+Fresher looking for job in any field,45
+I am hardworking and quick learner,42
+Basic knowledge of excel and office tools,48
+Looking for opportunity to grow my career,44
+I have done graduation and looking for a suitable job,46
+"Willing to work in any sector, have basic knowledge of computers",47
+Have done some online courses and want to start a career,43
+Know basic English communication and can handle office work,45
+I am a fresher with good attitude and eagerness to learn,41
+Have completed 12th grade and looking for entry level jobs,39
+Good at Microsoft Word and basic internet browsing,44
+Some experience in sales but nothing specific to mention,48
+"I am punctual and sincere, looking for any job opportunity",40
+Have done a short computer course and know typing,43
+Seeking any work from home or office job to support family,38
+Have experience working in a shop for 1 year as helper,42
+I know a little bit about accounting and want to learn more,44
+Looking for admin or data entry job with basic skill set,46
+I can handle customers and do basic communication in English,45
+Completed diploma and interested in technical field,49
+"Ready to work in any domain, flexible with timing and location",39
+Some knowledge of social media and want job in marketing,43
+Done basic nursing course and want to work in hospital,47
+Have basic driving skills and can work as delivery person,40
+Know how to use computer and basic MS Office applications,44
+Seeking data entry or back office job with decent typing speed,46
+Completed ITI and looking for any technician or helper job,48
+Some customer handling experience from a retail shop,42
+"I am a hard worker and never give up, seeking job",38
+Completed 10th and done a vocational training course,35
+Want to work as security guard or any field job,37
+Have done some cooking at home and want chef assistant job,40
+Looking for housekeeping or office boy role in any company,36
+"Have experience helping in family business, want outside job now",42
+"Good listener and team player, seeking any corporate job",39
+Completed short-term English course and basic computer training,41
+Some knowledge of Tally from a coaching class,45
+Want to work as receptionist with basic communication skills,44
+Know basics of photography and want to work in media,43
+Completed hotel management diploma but no work experience,50
+Some exposure to warehouse picking and packing work,44
+Seeking job as lab assistant with basic science knowledge,46
+Done BCA but no practical project experience,51
+Looking for BPO job with average English speaking skills,47
+"Have done painting work as part-time, want a full-time role",40
+Seeking plumber or electrician helper job,38
+Have done basic computer course and want IT sector job,44
+Some knowledge of digital marketing from YouTube videos,43
+Completed BBM degree with no internship experience,50
+Need job urgently,10
+Call me for work,12
+No experience but willing to learn,20
+Nothing much to say,5
+asdf random resume text,0
+Please give me job,8
+I want work,6
+Hire me,4
+Looking for job,9
+"Need money, any job okay",7
+I am available for work immediately,14
+Will do any work,8
+"Jobless, need employment",10
+I exist,2
+Just need a job ASAP,9
+My name is Raju and I want job,12
+xyzxyz no experience any job will do,3
+"Have time, need job",7
+Ready to work anywhere anytime,15
+No degree no skills but I will try,11
+"Desperate for employment, please consider me",13
+Very hard working please hire,10
+I have done nothing much but want to grow,8
+Total fresher zero experience,16
+Please sir give job,5
+"My brother referred me, looking for position",12
+Will work for low salary too,9
+I can breathe and come on time,3
+I want IT job I know nothing but will learn,14
+No clue what I want to do but need income,7
+Just completed school need job now,15
+"Nothing to show, willing to try anything",10
+Please review my application and give chance,12
+Looking for any position vacant in your esteemed company,13
+"Fresher, no skills, no degree, open to any work",8
+Will be honest and punctual that is all,11
+My aim is to get a job and earn money,9
+Zero qualification but very dedicated,7
+God bless you if you hire me,4
+Excellent opportunity seeker available,10
+Nothing special to add in resume,6
+I want to be employed at your company,9
+"Currently doing nothing, need a job soon",8
+Please consider this as my formal application,11
+N/A,1
+See attached documents (no skills listed),5
+I don't know what skills are required but I want this job,12
+Very motivated person looking for any opening,13
+Will learn everything on the job,10
+"Unemployed since long time, please help",9
