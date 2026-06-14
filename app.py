@@ -143,10 +143,12 @@ def fallback_resume_parser(resume_text, pdf_name):
         resume_data['email'] = emails[0]
     
     # Extract phone number
-    phone_pattern = r'(\+\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}'
+    # Use a non-capturing group so re.findall returns the full match (not only the country code)
+    phone_pattern = r'(?:\+\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}'
     phones = re.findall(phone_pattern, resume_text)
     if phones:
-        resume_data['mobile_number'] = ''.join(phones[0]) if isinstance(phones[0], tuple) else phones[0]
+        # re.findall with the non-capturing group returns full matched strings
+        resume_data['mobile_number'] = phones[0]
     
     # Extract name (usually in the first few lines)
     lines = resume_text.split('\n')
@@ -732,7 +734,8 @@ def run():
                     # Display information with fallbacks in an attractive layout
                     name_display = resume_data.get('name', 'Not detected')
                     email_display = resume_data.get('email', 'Not detected')
-                    mobile_display = resume_data.get('mobile_number', 'Not detected')
+                    # Prefer user-provided mobile (`act_mob`) if filled; otherwise fall back to parsed resume number
+                    mobile_display = act_mob if act_mob else resume_data.get('mobile_number', 'Not detected')
                     degree_display = resume_data.get('degree', 'Not detected')
                     pages_display = resume_data.get('no_of_pages', 1)
                     
@@ -774,6 +777,8 @@ def run():
                     </div>
                     """, unsafe_allow_html=True)
 
+                    # debug demo removed
+
                 except Exception:
                     # Silently handle display errors and show fallback
                     st.info("📄 Some resume details could not be extracted, but analysis will continue.")
@@ -802,7 +807,7 @@ def run():
                     """, unsafe_allow_html=True)
                 
                 #### if Work Experience/Experience then Experience level
-                elif any(exp in resume_text.upper() for exp in ['EXPERIENCE', 'WORK EXPERIENCE']):
+                elif re.search(r'^\s*(WORK EXPERIENCE|PROFESSIONAL EXPERIENCE|EXPERIENCE)\s*$', resume_text, re.MULTILINE | re.IGNORECASE):
                     cand_level = "Experienced"
                     st.markdown("""
                     <div class="info-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
@@ -839,21 +844,24 @@ def run():
 
                 ### Keywords for Recommendations
                 # Tech Fields
-                ds_keyword = ['tensorflow','keras','pytorch','machine learning','deep Learning','flask','streamlit','data science','pandas','numpy','scikit-learn','jupyter','matplotlib','seaborn','statistics','regression','classification','neural network','nlp','computer vision']
-                web_keyword = ['react', 'django', 'node js', 'react js', 'php', 'laravel', 'magento', 'wordpress','javascript', 'angular js', 'c#', 'asp.net', 'flask', 'html', 'css', 'vue', 'bootstrap', 'tailwind', 'typescript', 'next.js', 'express', 'mongodb', 'mysql', 'frontend', 'backend', 'fullstack']
-                android_keyword = ['android','android development','flutter','kotlin','xml','kivy','android studio','java android','mobile development','firebase android']
-                ios_keyword = ['ios','ios development','swift','cocoa','cocoa touch','xcode','objective-c','swiftui','uikit','iphone development']
-                uiux_keyword = ['ux','adobe xd','figma','zeplin','balsamiq','ui','prototyping','wireframes','storyframes','adobe photoshop','photoshop','editing','adobe illustrator','illustrator','adobe after effects','after effects','adobe premier pro','premier pro','adobe indesign','indesign','wireframe','solid','grasp','user research','user experience','sketch','invision','usability']
+                ds_keyword = ['tensorflow','keras','pytorch','machine learning','deep learning','flask','streamlit','data science','pandas','numpy','scikit-learn','scikit','sklearn','jupyter','matplotlib','seaborn','statistics','regression','classification','neural network','nlp','computer vision','cv','ml','ai','artificial intelligence']
+                web_keyword = ['react', 'django', 'node js', 'node', 'nodejs','react js', 'php', 'laravel', 'magento', 'wordpress','javascript', 'js','angular js', 'angular','c#', 'csharp','asp.net', 'flask', 'html', 'css', 'vue', 'vuejs','bootstrap', 'tailwind', 'typescript', 'ts','next.js', 'nextjs','express', 'mongodb', 'mysql', 'postgres','postgresql','frontend', 'backend', 'fullstack','web']
+                android_keyword = ['android','android development','flutter','kotlin','xml','kivy','android studio','java android','java','mobile development','firebase android','firebase']
+                ios_keyword = ['ios','ios development','swift','cocoa','cocoa touch','xcode','objective-c','objective c','swiftui','uikit','iphone development','iphone']
+                uiux_keyword = ['ux','adobe xd','xd','figma','zeplin','balsamiq','ui','prototyping','wireframes','storyframes','adobe photoshop','photoshop','editing','adobe illustrator','illustrator','adobe after effects','after effects','adobe premier pro','premier pro','adobe indesign','indesign','wireframe','solid','grasp','user research','user experience','sketch','invision','usability','design']
                 
                 # Extended Tech Fields
-                genai_keyword = ['generative ai','llm','large language model','chatgpt','gpt','openai','langchain','prompt engineering','rag','retrieval augmented','transformers','hugging face','bert','claude','gemini','ai agents','vector database','embeddings','fine-tuning','llama']
-                cloud_keyword = ['aws','azure','gcp','google cloud','amazon web services','cloud computing','ec2','s3','lambda','cloudformation','terraform','cloud architecture','iaas','paas','saas','docker','kubernetes','k8s','microservices','serverless']
-                devops_keyword = ['devops','ci/cd','jenkins','github actions','gitlab ci','docker','kubernetes','ansible','puppet','chef','terraform','monitoring','prometheus','grafana','elk','linux','bash','shell scripting','infrastructure','deployment','containerization']
-                cyber_keyword = ['cybersecurity','security','penetration testing','ethical hacking','vulnerability','firewall','siem','soc','network security','information security','cryptography','malware','incident response','compliance','gdpr','iso 27001','cissp','ceh','security audit','threat analysis']
-                data_eng_keyword = ['data engineering','etl','data pipeline','airflow','spark','hadoop','kafka','data warehouse','snowflake','databricks','sql','big data','data lake','dbt','data modeling','redshift','bigquery','data integration','batch processing','stream processing']
-                qa_keyword = ['qa','quality assurance','testing','test automation','selenium','cypress','jest','junit','testng','api testing','postman','jmeter','load testing','performance testing','regression testing','manual testing','bug tracking','jira','test cases','agile testing']
-                product_keyword = ['product management','product manager','roadmap','agile','scrum','jira','user stories','sprint','backlog','stakeholder','mvp','product strategy','product analytics','a/b testing','feature prioritization','go-to-market','product lifecycle','user feedback','competitive analysis']
-                blockchain_keyword = ['blockchain','solidity','ethereum','smart contracts','web3','cryptocurrency','defi','nft','consensus','distributed ledger','hyperledger','bitcoin','crypto','token','dapp','decentralized','metamask','truffle','hardhat']
+                genai_keyword = ['generative ai','llm','large language model','chatgpt','gpt','openai','langchain','prompt engineering','rag','retrieval augmented','transformers','hugging face','bert','claude','gemini','ai agents','vector database','embeddings','fine-tuning','llama','generative','ai']
+                cloud_keyword = ['aws','azure','gcp','google cloud','amazon web services','cloud computing','ec2','s3','lambda','cloudformation','terraform','cloud architecture','iaas','paas','saas','docker','kubernetes','k8s','microservices','serverless','cloud']
+                devops_keyword = ['devops','ci/cd','ci cd','cicd','jenkins','github actions','gitlab ci','docker','kubernetes','ansible','puppet','chef','terraform','monitoring','prometheus','grafana','elk','linux','bash','shell scripting','infrastructure','deployment','containerization','deployment']
+                cyber_keyword = ['cybersecurity','security','penetration testing','ethical hacking','vulnerability','firewall','siem','soc','network security','information security','cryptography','malware','incident response','compliance','gdpr','iso 27001','cissp','ceh','security audit','threat analysis','secure']
+                data_eng_keyword = ['data engineering','etl','data pipeline','airflow','spark','apache spark','hadoop','kafka','data warehouse','snowflake','databricks','sql','big data','data lake','dbt','data modeling','redshift','bigquery','data integration','batch processing','stream processing','data']
+                qa_keyword = ['qa','quality assurance','testing','test automation','selenium','cypress','jest','junit','testng','api testing','postman','jmeter','load testing','performance testing','regression testing','manual testing','bug tracking','jira','test cases','agile testing','automated testing']
+                product_keyword = ['product management','product manager','roadmap','agile','scrum','jira','user stories','sprint','backlog','stakeholder','mvp','product strategy','product analytics','a/b testing','feature prioritization','go-to-market','product lifecycle','user feedback','competitive analysis','product']
+                blockchain_keyword = ['blockchain','solidity','ethereum','smart contracts','web3','cryptocurrency','defi','nft','consensus','distributed ledger','hyperledger','bitcoin','crypto','token','dapp','decentralized','metamask','truffle','hardhat','blockchain']
+                
+                # Software Development (Generic) - prioritize this for general software developers
+                softdev_keyword = ['software developer','software engineer','engineer','full stack','fullstack','backend development','frontend development','web development','google','microsoft','amazon','tech company']
                 
                 # Non-Tech Fields
                 marketing_keyword = ['marketing','digital marketing','seo','sem','google ads','facebook ads','social media marketing','content marketing','email marketing','marketing automation','hubspot','mailchimp','brand management','campaign','analytics','google analytics','influencer marketing','ppc','cpc','conversion rate']
@@ -894,6 +902,7 @@ def run():
                 
                 # Create a dictionary to count matches for each category
                 category_matches = {
+                    'Software Development': {'keywords': softdev_keyword, 'count': 0, 'course': web_course},
                     'Data Science': {'keywords': ds_keyword, 'count': 0, 'course': ds_course},
                     'Web Development': {'keywords': web_keyword, 'count': 0, 'course': web_course},
                     'Android Development': {'keywords': android_keyword, 'count': 0, 'course': android_course},
@@ -932,7 +941,6 @@ def run():
                 # Count keyword matches - PRIORITIZE JOB DESCRIPTION
                 # If job description is provided, match ONLY against it for recommendations
                 # Otherwise fall back to resume analysis
-                import re
                 
                 def word_match(keyword, text):
                     """Check if keyword exists as a whole word/phrase in text"""
@@ -955,18 +963,30 @@ def run():
                         if job_desc_for_matching:
                             # Match ONLY against job description when it's provided
                             if word_match(keyword, job_desc_for_matching):
-                                data['count'] += 5
+                                # Prioritize Software Development keywords higher
+                                if category == 'Software Development':
+                                    data['count'] += 10
+                                else:
+                                    data['count'] += 5
                         else:
                             # No job description - fall back to resume analysis
                             # Check in skills list
                             if skills_to_check:
                                 for skill in skills_to_check:
                                     if keyword_lower in skill.lower() or skill.lower() in keyword_lower:
-                                        data['count'] += 2
+                                        # Prioritize Software Development keywords higher
+                                        if category == 'Software Development':
+                                            data['count'] += 5
+                                        else:
+                                            data['count'] += 2
                             
                             # Check in resume text
                             if word_match(keyword, resume_text_for_matching):
-                                data['count'] += 1
+                                # Prioritize Software Development keywords higher
+                                if category == 'Software Development':
+                                    data['count'] += 3
+                                else:
+                                    data['count'] += 1
                 
                 # Find the category with maximum matches
                 best_category = None
@@ -978,6 +998,7 @@ def run():
                 
                 # Define recommended skills for each category
                 category_recommended_skills = {
+                    'Software Development': ['Full Stack Development','REST APIs','System Design','Database Design','Version Control','Git','Clean Code','OOP','Design Patterns','Agile Methodology','Code Review','Testing','Problem Solving','Algorithm Design','Data Structures'],
                     'Data Science': ['Data Visualization','Predictive Analysis','Statistical Modeling','Data Mining','Clustering & Classification','Data Analytics','Quantitative Analysis','Web Scraping','ML Algorithms','Keras','Pytorch','Probability','Scikit-learn','Tensorflow','Flask','Streamlit'],
                     'Web Development': ['React','Django','Node JS','React JS','php','laravel','Magento','wordpress','Javascript','Angular JS','c#','Flask','SDK'],
                     'Android Development': ['Android','Android development','Flutter','Kotlin','XML','Java','Kivy','GIT','SDK','SQLite'],
@@ -1082,11 +1103,18 @@ def run():
                         job_text_lower = job_description_text.lower()
                         job_skills = set()
                         for skill in all_skill_keywords:
+                            # Try exact word boundary match first
                             if re.search(r'\b' + re.escape(skill.lower()) + r'\b', job_text_lower):
                                 job_skills.add(skill.lower())
+                            # For single-word skills, also try flexible matching
+                            elif ' ' not in skill and len(skill) > 2:
+                                # For abbreviations and short keywords, do case-insensitive substring matching
+                                if skill.lower() in job_text_lower:
+                                    job_skills.add(skill.lower())
 
-                        if not job_skills:
-                            st.warning("Could not identify key technical skills in the job description. The skills score may be inaccurate.")
+                        # Only warn if very few skills found (less than 3)
+                        if len(job_skills) < 3:
+                            st.warning("Could not identify many technical skills in the job description. The skills score may be less accurate. Consider including specific technologies in the job description.")
                         
                         matching_skills = resume_skills.intersection(job_skills)
                         scores['missing_skills'] = list(job_skills - resume_skills)
