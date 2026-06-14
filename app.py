@@ -127,7 +127,6 @@ def pdf_reader(file):
                                       caching=True,
                                       check_extractable=True):
             page_interpreter.process_page(page)
-            print(page)
         text = fake_file_handle.getvalue()
 
     ## close open handles
@@ -593,8 +592,7 @@ def run():
     st.sidebar.markdown("""
     <div style="text-align: center; padding: 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; margin: 1rem 0;">
         <p style="color: white; font-weight: 600; margin: 0; font-size: 0.9rem;">
-            ✨ Built with passion <br>
-            <a href= style="text-decoration: none; color: #ffd700; font-weight: 700;"></a>
+            ✨ Built with passion
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -1723,7 +1721,18 @@ def run():
                 db_skills = ', '.join(resume_data.get('skills', []))
                 db_pages = resume_data.get('no_of_pages', 'N/A')
 
-                insert_data(sec_token,ip_add,host_name,dev_user,os_name_ver,latlong,city,state,country,act_name,act_mail,act_mob,db_name,db_email,str(resume_score),act_timestamp,str(db_pages),reco_field,cand_level,db_skills,', '.join(recommended_skills),', '.join(rec_course),pdf_name)
+                # Safely join rec_course (can be a string or list)
+                if isinstance(rec_course, list):
+                    rec_course_str = ', '.join(rec_course)
+                elif isinstance(rec_course, str):
+                    rec_course_str = rec_course
+                else:
+                    rec_course_str = ''
+                if isinstance(recommended_skills, list):
+                    rec_skills_str = ', '.join(recommended_skills)
+                else:
+                    rec_skills_str = str(recommended_skills)
+                insert_data(sec_token,ip_add,host_name,dev_user,os_name_ver,latlong,city,state,country,act_name,act_mail,act_mob,db_name,db_email,str(resume_score),act_timestamp,str(db_pages),reco_field,cand_level,db_skills,rec_skills_str,rec_course_str,pdf_name)
                 
                 ## Recommending Resume Writing Videos
                 st.markdown("---")
@@ -1739,8 +1748,8 @@ def run():
                     interview_vid = random.choice(interview_videos)
                     st.video(interview_vid)
 
-                # Clean up uploaded file
-                os.remove(save_image_path)
+                # Note: Do not delete the uploaded file during the session
+                # It will be cleaned up by OS temp file management
     
     ###### CODE FOR FEEDBACK SIDE ######
     elif choice == 'Feedback':
@@ -1785,20 +1794,24 @@ def run():
         <div class="info-card fade-in">
             <h2 style="color: #333; margin-top: 0;">🌟 About AI Resume Analyzer</h2>
             <p style="color: #666; line-height: 1.6;">
-                This application is a powerful tool designed to help job seekers optimize their resumes and increase their chances of landing their dream job. By leveraging the power of AI and Natural Language Processing (NLP), our analyzer provides intelligent feedback, skill recommendations, and insights that are crucial in today's competitive job market.
+                This application is a powerful tool designed to help job seekers optimize their resumes and increase their chances of landing their dream job. By leveraging the power of AI, Machine Learning, and Natural Language Processing (NLP), our analyzer provides intelligent feedback, skill recommendations, and insights that are crucial in today's competitive job market.
             </p>
             <h4 style="color: #4facfe; margin-top: 2rem;">🚀 Key Features:</h4>
             <ul style="color: #666; list-style-type: '✅ '; padding-left: 1.5rem;">
-                <li><b>Intelligent Resume Parsing:</b> Extracts key information like contact details, skills, and education from your PDF resume.</li>
-                <li><b>AI-Powered Skill Recommendations:</b> Suggests relevant skills to add to your resume based on your predicted career field.</li>
-                <li><b>Resume Scoring:</b> Provides a score based on the completeness of your resume's sections.</li>
+                <li><b>Intelligent Resume Parsing:</b> Extracts key information like name, contact details, skills, and education from your PDF resume.</li>
+                <li><b>Keyword-Based Field Detection:</b> Identifies your career field by matching your resume/JD against 30+ curated keyword lists.</li>
+                <li><b>ML-Powered Prediction:</b> A trained Random Forest model (99.7% accuracy) predicts your job role from 42 career categories using TF-IDF features.</li>
+                <li><b>Resume Score Prediction:</b> ML model predicts your resume score (96.8% accuracy within ±10 points) trained on 540 real resumes.</li>
+                <li><b>Keyword vs ML Comparison:</b> Side-by-side comparison of rule-based and ML-based analysis showing real results from your resume.</li>
+                <li><b>JD Match Analysis:</b> Paste a job description to get Skills Match, Keyword Alignment, and Overall ATS Score gauges.</li>
                 <li><b>Course Recommendations:</b> Recommends online courses to help you bridge skill gaps.</li>
-                <li><b>Video Resources:</b> Offers curated videos on resume writing and interview preparation.</li>
+                <li><b>Resume Checklist & Scoring:</b> Scores your resume on 14 criteria (Contact, Education, Skills, Projects, etc.).</li>
             </ul>
             <h4 style="color: #4facfe; margin-top: 2rem;">🛠️ Technologies Used:</h4>
             <p style="color: #666;">
                 <b>Frontend:</b> Streamlit<br>
                 <b>Backend & NLP:</b> Python, Pyresparser, NLTK, Spacy, PDFMiner<br>
+                <b>Machine Learning:</b> Scikit-learn (Random Forest, TF-IDF, Ridge Regression)<br>
                 <b>Database:</b> MySQL<br>
                 <b>Visualization:</b> Plotly
             </p>
