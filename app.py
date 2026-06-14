@@ -528,59 +528,59 @@ def run():
 
     ###### Creating Database and Table ######
 
+    if DB_AVAILABLE and cursor is not None:
+        # Create the DB
+        try:
+            db_sql = """CREATE DATABASE IF NOT EXISTS CV;"""
+            cursor.execute(db_sql)
 
-    # Create the DB
-    try:
-        db_sql = """CREATE DATABASE IF NOT EXISTS CV;"""
-        cursor.execute(db_sql)
-
-        # Create table user_data and user_feedback
-        DB_table_name = 'user_data'
-        table_sql = "CREATE TABLE IF NOT EXISTS " + DB_table_name + """
-                        (ID INT NOT NULL AUTO_INCREMENT,
-                        sec_token varchar(20) NOT NULL,
-                        ip_add varchar(50) NULL,
-                        host_name varchar(50) NULL,
-                        dev_user varchar(50) NULL,
-                        os_name_ver varchar(50) NULL,
-                        latlong varchar(50) NULL,
-                        city varchar(50) NULL,
-                        state varchar(50) NULL,
-                        country varchar(50) NULL,
-                        act_name varchar(50) NOT NULL,
-                        act_mail varchar(50) NOT NULL,
-                        act_mob varchar(20) NOT NULL,
-                        Name varchar(500) NOT NULL,
-                        Email_ID VARCHAR(500) NOT NULL,
-                        resume_score VARCHAR(8) NOT NULL,
-                        Timestamp VARCHAR(50) NOT NULL,
-                        Page_no VARCHAR(5) NOT NULL,
-                        Predicted_Field BLOB NOT NULL,
-                        User_level BLOB NOT NULL,
-                        Actual_skills BLOB NOT NULL,
-                        Recommended_skills BLOB NOT NULL,
-                        Recommended_courses BLOB NOT NULL,
-                        pdf_name varchar(50) NOT NULL,
-                        PRIMARY KEY (ID)
-                        );
-                    """
-        cursor.execute(table_sql)
-
-        DBf_table_name = 'user_feedback'
-        tablef_sql = "CREATE TABLE IF NOT EXISTS " + DBf_table_name + """
-                        (ID INT NOT NULL AUTO_INCREMENT,
-                            feed_name varchar(50) NOT NULL,
-                            feed_email VARCHAR(50) NOT NULL,
-                            feed_score VARCHAR(5) NOT NULL,
-                            comments VARCHAR(100) NULL,
+            # Create table user_data and user_feedback
+            DB_table_name = 'user_data'
+            table_sql = "CREATE TABLE IF NOT EXISTS " + DB_table_name + """
+                            (ID INT NOT NULL AUTO_INCREMENT,
+                            sec_token varchar(20) NOT NULL,
+                            ip_add varchar(50) NULL,
+                            host_name varchar(50) NULL,
+                            dev_user varchar(50) NULL,
+                            os_name_ver varchar(50) NULL,
+                            latlong varchar(50) NULL,
+                            city varchar(50) NULL,
+                            state varchar(50) NULL,
+                            country varchar(50) NULL,
+                            act_name varchar(50) NOT NULL,
+                            act_mail varchar(50) NOT NULL,
+                            act_mob varchar(20) NOT NULL,
+                            Name varchar(500) NOT NULL,
+                            Email_ID VARCHAR(500) NOT NULL,
+                            resume_score VARCHAR(8) NOT NULL,
                             Timestamp VARCHAR(50) NOT NULL,
+                            Page_no VARCHAR(5) NOT NULL,
+                            Predicted_Field BLOB NOT NULL,
+                            User_level BLOB NOT NULL,
+                            Actual_skills BLOB NOT NULL,
+                            Recommended_skills BLOB NOT NULL,
+                            Recommended_courses BLOB NOT NULL,
+                            pdf_name varchar(50) NOT NULL,
                             PRIMARY KEY (ID)
-                        );
-                    """
-        cursor.execute(tablef_sql)
-    except pymysql.Error as e:
-        st.error(f"Error creating database tables: {e}")
-        st.stop()
+                            );
+                        """
+            cursor.execute(table_sql)
+
+            DBf_table_name = 'user_feedback'
+            tablef_sql = "CREATE TABLE IF NOT EXISTS " + DBf_table_name + """
+                            (ID INT NOT NULL AUTO_INCREMENT,
+                                feed_name varchar(50) NOT NULL,
+                                feed_email VARCHAR(50) NOT NULL,
+                                feed_score VARCHAR(5) NOT NULL,
+                                comments VARCHAR(100) NULL,
+                                Timestamp VARCHAR(50) NOT NULL,
+                                PRIMARY KEY (ID)
+                            );
+                        """
+            cursor.execute(tablef_sql)
+        except pymysql.Error as e:
+            st.error(f"Error creating database tables: {e}")
+            st.stop()
 
 
     ###### CODE FOR CLIENT SIDE (USER) ######
@@ -622,7 +622,6 @@ def run():
             statee = address.get('state', 'Unknown')
             countryy = address.get('country', 'Unknown')
         except Exception as e:
-            st.warning(f"Geocoding failed: {e}. Using default location values.")
             latlong = [0.0, 0.0]
             cityy = 'Unknown'
             statee = 'Unknown' 
@@ -854,31 +853,31 @@ def run():
                 genai_keyword = ['generative ai','llm','large language model','chatgpt','gpt','openai','langchain','prompt engineering','rag','retrieval augmented','transformers','hugging face','bert','claude','gemini','ai agents','vector database','embeddings','fine-tuning','llama','generative','ai']
                 cloud_keyword = ['aws','azure','gcp','google cloud','amazon web services','cloud computing','ec2','s3','lambda','cloudformation','terraform','cloud architecture','iaas','paas','saas','docker','kubernetes','k8s','microservices','serverless','cloud']
                 devops_keyword = ['devops','ci/cd','ci cd','cicd','jenkins','github actions','gitlab ci','docker','kubernetes','ansible','puppet','chef','terraform','monitoring','prometheus','grafana','elk','linux','bash','shell scripting','infrastructure','deployment','containerization','deployment']
-                cyber_keyword = ['cybersecurity','security','penetration testing','ethical hacking','vulnerability','firewall','siem','soc','network security','information security','cryptography','malware','incident response','compliance','gdpr','iso 27001','cissp','ceh','security audit','threat analysis','secure']
-                data_eng_keyword = ['data engineering','etl','data pipeline','airflow','spark','apache spark','hadoop','kafka','data warehouse','snowflake','databricks','sql','big data','data lake','dbt','data modeling','redshift','bigquery','data integration','batch processing','stream processing','data']
+                cyber_keyword = ['cybersecurity','security','penetration testing','ethical hacking','vulnerability','firewall','siem','soc','network security','information security','cryptography','malware','incident response','compliance','gdpr','iso 27001','cissp','ceh','security audit','threat analysis','secure coding','secure protocol']
+                data_eng_keyword = ['data engineering','etl','data pipeline','airflow','spark','apache spark','hadoop','kafka','data warehouse','snowflake','databricks','sql','big data','data lake','dbt','data modeling','redshift','bigquery','data integration','batch processing','stream processing']
                 qa_keyword = ['qa','quality assurance','testing','test automation','selenium','cypress','jest','junit','testng','api testing','postman','jmeter','load testing','performance testing','regression testing','manual testing','bug tracking','jira','test cases','agile testing','automated testing']
-                product_keyword = ['product management','product manager','roadmap','agile','scrum','jira','user stories','sprint','backlog','stakeholder','mvp','product strategy','product analytics','a/b testing','feature prioritization','go-to-market','product lifecycle','user feedback','competitive analysis','product']
-                blockchain_keyword = ['blockchain','solidity','ethereum','smart contracts','web3','cryptocurrency','defi','nft','consensus','distributed ledger','hyperledger','bitcoin','crypto','token','dapp','decentralized','metamask','truffle','hardhat','blockchain']
+                product_keyword = ['product management','product manager','roadmap','agile','scrum','jira','user stories','sprint','backlog','stakeholder','mvp','product strategy','product analytics','a/b testing','feature prioritization','go-to-market','product lifecycle','user feedback','competitive analysis']
+                blockchain_keyword = ['blockchain','solidity','ethereum','smart contracts','web3','cryptocurrency','defi','nft','consensus','distributed ledger','hyperledger','bitcoin','crypto','token','dapp','decentralized','metamask','truffle','hardhat']
                 
-                # Software Development (Generic) - prioritize this for general software developers
-                softdev_keyword = ['software developer','software engineer','engineer','full stack','fullstack','backend development','frontend development','web development','google','microsoft','amazon','tech company']
+                # Software Development (Generic) - use specific terms to avoid false matches in non-tech JDs
+                softdev_keyword = ['software developer', 'software engineer', 'software engineering', 'software development', 'full stack', 'fullstack', 'backend development', 'frontend development', 'programming', 'coding', 'oop', 'object oriented', 'design patterns', 'clean code', 'code review', 'software architecture', 'software testing', 'unit testing', 'integration testing', 'rest api', 'microservices', 'version control', 'agile development', 'sprint planning', 'technical lead', 'tech lead']
                 
                 # Non-Tech Fields
                 marketing_keyword = ['marketing','digital marketing','seo','sem','google ads','facebook ads','social media marketing','content marketing','email marketing','marketing automation','hubspot','mailchimp','brand management','campaign','analytics','google analytics','influencer marketing','ppc','cpc','conversion rate']
                 sales_keyword = ['sales','salesforce','crm','lead generation','b2b','b2c','account management','cold calling','sales strategy','negotiation','closing','quota','pipeline','customer acquisition','upselling','cross-selling','sales funnel','business development','client relationship']
                 finance_keyword = ['finance','accounting','financial analysis','excel','financial modeling','budgeting','forecasting','investment','banking','audit','taxation','sap','quickbooks','tally','gst','balance sheet','profit loss','cash flow','equity','valuation','cpa','cfa','risk management']
-                hr_keyword = ['hr','human resources','recruitment','talent acquisition','onboarding','payroll','employee engagement','performance management','hris','workday','succession planning','compensation','benefits','training','development','labor law','hr policies','workforce planning','diversity','inclusion']
-                operations_keyword = ['operations','operations management','process improvement','lean','six sigma','supply chain','logistics','inventory','procurement','vendor management','quality control','manufacturing','production','efficiency','kpi','sop','erp','sap','oracle','operational excellence']
+                hr_keyword = ['hr','human resources','recruitment','talent acquisition','onboarding','payroll','employee engagement','performance management','hris','workday','succession planning','compensation','labor law','hr policies','workforce planning']
+                operations_keyword = ['operations','operations management','process improvement','lean','six sigma','supply chain','logistics','inventory','procurement','vendor management','quality control','manufacturing','production','kpi','sop','erp','sap','oracle','operational excellence']
                 supply_chain_keyword = ['supply chain','logistics','inventory management','procurement','warehousing','distribution','demand planning','supply planning','freight','shipping','transportation','vendor management','sourcing','purchase order','material planning','mrp','erp supply chain','cost optimization']
                 project_mgmt_keyword = ['project management','pmp','prince2','agile','scrum','kanban','ms project','asana','monday.com','trello','project planning','resource allocation','timeline','milestone','risk management','stakeholder management','budget management','scope management','gantt chart','project delivery']
                 business_analysis_keyword = ['business analysis','business analyst','requirements gathering','brd','frd','use cases','process mapping','gap analysis','stakeholder analysis','data analysis','sql','tableau','power bi','business process','system analysis','functional requirements','uml','swimlane','as-is to-be']
                 entrepreneurship_keyword = ['entrepreneurship','startup','business plan','venture capital','angel investor','pitch deck','bootstrapping','business model','market research','competitive analysis','growth hacking','scaling','funding','seed round','series a','incubator','accelerator','lean startup','mvp','customer validation']
-                admin_keyword = ['administration','administrative','office management','scheduling','calendar management','data entry','filing','records management','correspondence','travel arrangement','meeting coordination','office supplies','reception','executive assistant','personal assistant','office administration','clerical','organizational skills','business administration','business operations','strategic planning','department coordination','workflow','smooth workflow','coordinating departments','daily operations','strategic goals','interpersonal skills','multitasking','time management','attention to detail','decision-making','problem-solving','ms office','microsoft office','word excel','excel powerpoint','communication skills','organizational','work independently','work in a team','team player','basic understanding of business','knowledge of ms office','good organizational']
+                admin_keyword = ['administration','administrative','office management','scheduling','calendar management','data entry','filing','records management','correspondence','travel arrangement','meeting coordination','office supplies','reception','executive assistant','personal assistant','office administration','clerical','organizational skills','business administration','business operations','ms office','microsoft office','word excel','excel powerpoint','knowledge of ms office']
                 education_keyword = ['education','teaching','curriculum','lesson planning','classroom management','pedagogy','e-learning','lms','moodle','instructional design','student assessment','educational technology','tutoring','training','course development','academic','k-12','higher education','special education']
                 psychology_keyword = ['psychology','counseling','therapy','mental health','behavioral analysis','cognitive psychology','clinical psychology','psychotherapy','assessment','diagnosis','intervention','case management','client assessment','psychological testing','trauma','anxiety','depression','cbt','dbt']
                 law_keyword = ['law','legal','attorney','lawyer','litigation','contracts','compliance','corporate law','intellectual property','patent','trademark','legal research','case law','paralegal','legal writing','due diligence','regulatory','mergers acquisitions','dispute resolution','arbitration']
                 healthcare_keyword = ['healthcare','clinical','patient care','medical records','emr','ehr','hipaa','healthcare management','hospital','clinic','diagnosis','treatment','medical terminology','icd-10','cpt','billing','healthcare it','telemedicine','public health','epidemiology']
-                nursing_keyword = ['nursing','registered nurse','rn','patient care','medication administration','vital signs','clinical skills','nursing assessment','care plan','wound care','iv therapy','emergency nursing','icu','or','pediatric nursing','geriatric nursing','nurse practitioner','lpn','bsn']
+                nursing_keyword = ['nursing','registered nurse','rn','patient care','medication administration','vital signs','clinical skills','nursing assessment','care plan','wound care','iv therapy','emergency nursing','icu','operating room','pediatric nursing','geriatric nursing','nurse practitioner','lpn','bsn']
                 medical_coding_keyword = ['medical coding','icd-10','cpt','hcpcs','medical billing','claims processing','revenue cycle','coding certification','cpc','ccs','drg','healthcare billing','insurance claims','reimbursement','coding accuracy','medical terminology','anatomy','health information']
                 pharmacy_keyword = ['pharmacy','pharmacist','pharmaceutical','drug dispensing','prescription','medication therapy','clinical pharmacy','compounding','pharmacy technician','drug interactions','formulary','pharmaceutical care','medication review','patient counseling','pharmacy management','inventory control','hospital pharmacy','retail pharmacy']
                 graphic_design_keyword = ['graphic design','photoshop','illustrator','indesign','canva','coreldraw','visual design','typography','branding','logo design','print design','digital design','layout','composition','color theory','vector graphics','raster','creative design','visual communication','motion graphics']
@@ -962,31 +961,20 @@ def run():
                         # If job description is provided, ONLY match against it
                         if job_desc_for_matching:
                             # Match ONLY against job description when it's provided
+                            # All categories are scored equally - no bias toward any field
                             if word_match(keyword, job_desc_for_matching):
-                                # Prioritize Software Development keywords higher
-                                if category == 'Software Development':
-                                    data['count'] += 10
-                                else:
-                                    data['count'] += 5
+                                data['count'] += 1
                         else:
                             # No job description - fall back to resume analysis
                             # Check in skills list
                             if skills_to_check:
                                 for skill in skills_to_check:
                                     if keyword_lower in skill.lower() or skill.lower() in keyword_lower:
-                                        # Prioritize Software Development keywords higher
-                                        if category == 'Software Development':
-                                            data['count'] += 5
-                                        else:
-                                            data['count'] += 2
+                                        data['count'] += 2
                             
                             # Check in resume text
                             if word_match(keyword, resume_text_for_matching):
-                                # Prioritize Software Development keywords higher
-                                if category == 'Software Development':
-                                    data['count'] += 3
-                                else:
-                                    data['count'] += 1
+                                data['count'] += 1
                 
                 # Find the category with maximum matches
                 best_category = None
@@ -1472,8 +1460,18 @@ def run():
             
             # Display Data
             try:
-                cursor.execute('''SELECT * FROM user_data''')
-                data = cursor.fetchall()
+                if DB_AVAILABLE and cursor is not None:
+                    cursor.execute('''SELECT * FROM user_data''')
+                    data = cursor.fetchall()
+                    is_mock = False
+                else:
+                    is_mock = True
+                    st.info("ℹ️ Database is not connected. Showing mock data for demonstration.")
+                    data = [
+                        (1, "token123", "127.0.0.1", "localhost", "user", "Windows 11", "12.97, 77.59", "Bangalore", "Karnataka", "India", "John Doe", "john.doe@example.com", "+1 (555) 019-2834", "Resume_John.pdf", "john.doe@example.com", "88", "2026-06-15 00:00:00", "2", "Software Development", "Experienced", "Python, SQL, Docker, React", "Git, AWS, Kubernetes", "AWS Certified Cloud Practitioner, Docker for Beginners", "Resume_John.pdf"),
+                        (2, "token456", "127.0.0.1", "localhost", "user", "Windows 11", "12.97, 77.59", "Bangalore", "Karnataka", "India", "Alice Smith", "alice.smith@example.com", "+1 (555) 019-5678", "Resume_Alice.pdf", "alice.smith@example.com", "74", "2026-06-15 00:05:00", "1", "Data Science", "Intermediate", "Python, Pandas, NumPy, Scikit-Learn", "Machine Learning, Deep Learning, Statistics", "Machine Learning by Andrew NG", "Resume_Alice.pdf")
+                    ]
+                
                 st.header("**User's Data**")
                 df = pd.DataFrame(data, columns=['ID', 'Token', 'IP Address', 'Host Name', 'Device User',
                                                 'OS', 'Lat/Long', 'City', 'State', 'Country', 'User Name',
@@ -1493,25 +1491,37 @@ def run():
                         user_ids = df['ID'].tolist()
                         selected_id = st.selectbox("Select User ID to Delete", user_ids, key="delete_user")
                         if st.button("Delete Selected User", key="del_user_btn"):
-                            cursor.execute(f"DELETE FROM user_data WHERE ID = {selected_id}")
-                            connection.commit()
-                            st.success(f"User with ID {selected_id} deleted successfully!")
-                            st.rerun()
+                            if not is_mock:
+                                cursor.execute(f"DELETE FROM user_data WHERE ID = {selected_id}")
+                                connection.commit()
+                                st.success(f"User with ID {selected_id} deleted successfully!")
+                                st.rerun()
+                            else:
+                                st.success(f"[Mock Mode] User with ID {selected_id} deleted successfully!")
                     else:
                         st.info("No user data to delete")
                 with col2:
                     if st.button("🗑️ Delete ALL User Data", key="del_all_users"):
-                        cursor.execute("DELETE FROM user_data")
-                        connection.commit()
-                        st.success("All user data deleted successfully!")
-                        st.rerun()
+                        if not is_mock:
+                            cursor.execute("DELETE FROM user_data")
+                            connection.commit()
+                            st.success("All user data deleted successfully!")
+                            st.rerun()
+                        else:
+                            st.success("[Mock Mode] All user data deleted successfully!")
                 
                 # Display Feedbacks
                 st.markdown("---")
-                cursor.execute('''SELECT * FROM user_feedback''')
-                data = cursor.fetchall()
+                if DB_AVAILABLE and cursor is not None:
+                    cursor.execute('''SELECT * FROM user_feedback''')
+                    data_feedback = cursor.fetchall()
+                else:
+                    data_feedback = [
+                        (1, "John Doe", "john.doe@example.com", "5", "Awesome tool! Extracted my skills perfectly and recommended some great courses.", "2026-06-15 00:02:00"),
+                        (2, "Alice Smith", "alice.smith@example.com", "4", "Very useful interface and simple navigation.", "2026-06-15 00:06:00")
+                    ]
                 st.header("**User's Feedback Data**")
-                df_feedback = pd.DataFrame(data, columns=['ID', 'Name', 'Email', 'Score', 'Comments', 'Timestamp'])
+                df_feedback = pd.DataFrame(data_feedback, columns=['ID', 'Name', 'Email', 'Score', 'Comments', 'Timestamp'])
                 st.dataframe(df_feedback)
                 st.markdown(get_csv_download_link(df_feedback, 'Feedback_Data.csv', 'Download Report'), unsafe_allow_html=True)
                 
@@ -1524,19 +1534,25 @@ def run():
                         feedback_ids = df_feedback['ID'].tolist()
                         selected_feedback_id = st.selectbox("Select Feedback ID to Delete", feedback_ids, key="delete_feedback")
                         if st.button("Delete Selected Feedback", key="del_feedback_btn"):
-                            cursor.execute(f"DELETE FROM user_feedback WHERE ID = {selected_feedback_id}")
-                            connection.commit()
-                            st.success(f"Feedback with ID {selected_feedback_id} deleted successfully!")
-                            st.rerun()
+                            if not is_mock:
+                                cursor.execute(f"DELETE FROM user_feedback WHERE ID = {selected_feedback_id}")
+                                connection.commit()
+                                st.success(f"Feedback with ID {selected_feedback_id} deleted successfully!")
+                                st.rerun()
+                            else:
+                                st.success(f"[Mock Mode] Feedback with ID {selected_feedback_id} deleted successfully!")
                     else:
                         st.info("No feedback data to delete")
                 with col4:
                     if st.button("🗑️ Delete ALL Feedback Data", key="del_all_feedback"):
-                        cursor.execute("DELETE FROM user_feedback")
-                        connection.commit()
-                        st.success("All feedback data deleted successfully!")
-                        st.rerun()
-                        
+                        if not is_mock:
+                            cursor.execute("DELETE FROM user_feedback")
+                            connection.commit()
+                            st.success("All feedback data deleted successfully!")
+                            st.rerun()
+                        else:
+                            st.success("[Mock Mode] All feedback data deleted successfully!")
+                            
             except Exception as e:
                 st.error(f"Failed to fetch data from the database: {e}")
 
