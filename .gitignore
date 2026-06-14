@@ -37,4 +37,5 @@ Thumbs.db
 # Machine learning models
 ml/*.pkl 
 score_models/*.pkl
+score_model.pkl
 
