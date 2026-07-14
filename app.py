@@ -240,7 +240,10 @@ def fallback_resume_parser(resume_text, pdf_name):
     
     # Helper pattern to capture the major/specialization (e.g. "in Computer Engineering")
     # Excludes common noise like "CGPA", "GPA", "Grade", "Class", "Sem", "Year", "Upto", etc.
-    in_major = r'(?:\s+in\s+(?!cgpa|gpa|grade|class|sem|year|percent|from|at|by|with)[a-zA-Z]{2,20}(?:\s+(?:and|&|/)\s+)?(?:\s+(?!cgpa|gpa|grade|class|sem|year|percent|from|at|by|with)[a-zA-Z]{2,20}){0,2})?'
+    # Also excludes words that begin a new institution name (St, School, College, Institute, etc.)
+    # so the pattern doesn't bleed into the next education entry.
+    _excl = r'(?!cgpa|gpa|grade|class|sem|year|percent|from|at|by|with|st\b|school|college|institute|convent|university|senior|junior|higher|secondary)'
+    in_major = r'(?:\s+in\s+' + _excl + r'[a-zA-Z]{2,20}(?:\s+(?:and|&|/)\s+)?(?:\s+' + _excl + r'[a-zA-Z]{2,20}){0,2})?'
     
     degree_patterns = [
         # Full degree names with field (most specific first)
@@ -874,8 +877,14 @@ def run():
                     # Display information with fallbacks in an attractive layout
                     name_display = resume_data.get('name', 'Not detected')
                     email_display = resume_data.get('email', 'Not detected')
-                    # Prefer user-provided mobile (`act_mob`) if filled; otherwise fall back to parsed resume number
-                    mobile_display = act_mob if act_mob else resume_data.get('mobile_number', 'Not detected')
+                    # Prefer resume-extracted mobile; fall back to user-provided act_mob
+                    extracted_mob = resume_data.get('mobile_number', '')
+                    if extracted_mob and extracted_mob != 'Not detected':
+                        mobile_display = extracted_mob
+                    elif act_mob:
+                        mobile_display = act_mob
+                    else:
+                        mobile_display = 'Not detected'
                     degree_display = resume_data.get('degree', 'Not detected')
                     pages_display = resume_data.get('no_of_pages', 1)
                     
