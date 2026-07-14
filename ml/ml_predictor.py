@@ -31,17 +31,40 @@ _score_bundle = None
 _label_enc    = None
 _metrics      = None
 
+# sklearn version compatibility shim.
+# Models were trained with sklearn 1.9.x, which no longer stores `multi_class`
+# as an instance attribute on LogisticRegression. The currently installed
+# sklearn 1.7.x reads self.multi_class inside predict_proba, so we inject
+# the safe default value when the attribute is missing.
+_COMPAT_DEFAULTS = {
+    "multi_class": "auto",
+}
+
+
+def _patch_estimator(est):
+    """Inject missing sklearn compatibility attributes into a loaded estimator."""
+    if est is None:
+        return est
+    for attr, default in _COMPAT_DEFAULTS.items():
+        if not hasattr(est, attr):
+            setattr(est, attr, default)
+    return est
+
 
 def _load_models():
     global _role_model, _score_bundle, _label_enc, _metrics
     if _role_model is None and os.path.exists(ROLE_MODEL_PATH):
         try:
             _role_model = joblib.load(ROLE_MODEL_PATH)
+            _patch_estimator(_role_model)
         except Exception:
             _role_model = None  # corrupted file — treat as missing
     if _score_bundle is None and os.path.exists(SCORE_MODEL_PATH):
         try:
             _score_bundle = joblib.load(SCORE_MODEL_PATH)
+            # Patch the classifier inside the bundle (LogisticRegression etc.)
+            if isinstance(_score_bundle, dict) and "classifier" in _score_bundle:
+                _patch_estimator(_score_bundle["classifier"])
         except Exception:
             _score_bundle = None
     if _label_enc is None and os.path.exists(LABEL_ENC_PATH):
