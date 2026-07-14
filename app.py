@@ -574,7 +574,7 @@ def run():
     # Create attractive header
     st.markdown("""
     <div class="custom-header fade-in">
-        <h1>🤖 AI Resume Analyzer</h1>
+        <h1> AI Resume Analyzer</h1>
         <p>Unlock Your Career Potential with Smart Resume Analysis</p>
     </div>
     """, unsafe_allow_html=True)
@@ -1315,7 +1315,7 @@ def run():
                                 <span style='font-size:1.8rem;'>&#x1F916;</span>
                                 <div>
                                     <h3 style='color:#86efac; margin:0; font-size:1.1rem;'>ML-Based (Trained Model)</h3>
-                                    <p style='color:#64748b; margin:0; font-size:0.78rem;'>{ml_algo} | Trained on 10,000 resumes</p>
+                                    <p style='color:#64748b; margin:0; font-size:0.78rem;'> | Trained on 10,000 resumes</p>
                                 </div>
                             </div>
                         """, unsafe_allow_html=True)
